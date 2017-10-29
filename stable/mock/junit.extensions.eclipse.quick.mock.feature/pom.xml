@@ -11,7 +11,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
   <artifactId>junit.extensions.eclipse.quick.mock.feature</artifactId>
   <packaging>eclipse-feature</packaging>
-  <version>0.3.0.qualifier</version>
 
   <build>
     <plugins>

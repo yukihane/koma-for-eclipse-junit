@@ -11,6 +11,5 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
   <artifactId>junit.extensions.eclipse.quick.process</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <version>0.1.0.qualifier</version>
 
 </project>
