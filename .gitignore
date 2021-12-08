@@ -4,5 +4,5 @@
 External Plug-in Libraries/
 .project
 .classpath
-.settings
-target
+.settings/
+target/
