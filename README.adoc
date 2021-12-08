@@ -1,0 +1,28 @@
+= Forked Version https://github.com/kompiro/quick-junit[Quick JUnit], for myself-ish use.
+
+== Target Environments
+
+* Latest Eclipse
+* Latest https://spring.io/tools[STS for Eclipse]
+
+
+== Installation
+
+1. Build:
+   - `mvn clean package`
+2. Install into Eclipse:
+   - Select menu **Help > Install New Software...** .
+   - Select archive `repository/target/repository-xxx.zip`.
+
+
+== Documents
+
+- original README - README.textile
+- original README(ja) - ja/README.textile
+- development guide - ja/DEVELOPMENT_GETTING_STARTED_ja.txt
+
+
+== License
+
+http://www.eclipse.org/legal/cpl-v10.html[CPL 1.0] (see: http://quick-junit.osdn.jp/[original project site] )
+
