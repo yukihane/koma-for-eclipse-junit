@@ -1,0 +1,31 @@
+= Forked Version https://github.com/kompiro/quick-junit[Quick JUnit]
+
+== Target Environments
+
+* Latest Eclipse
+* Latest https://spring.io/tools[STS for Eclipse]
+
+Eclipse 2021-09, 2021-12 with Java 11 or later LTS version.
+
+== Installation
+
+1. Build:
+   - `mvn clean package`
+2. Install into Eclipse:
+   - Select menu **Help > Install New Software...** .
+   - Select archive `repository/target/repository-xxx.zip`.
+
+
+== Documents
+
+* original README - link:README.textile[]
+* original README(ja) - link:ja/README.textile[]
+* development guide(ja) - link:ja/DEVELOPMENT_GETTING_STARTED_ja.txt[]
+
+
+== License
+
+https://opensource.org/licenses/cpl1.0.txt[CPL 1.0] (see: http://quick-junit.osdn.jp/[original project site] )
+
+* https://licenses.opensource.jp/CPL-1.0/CPL-1.0.html[参考日本語訳]
+
