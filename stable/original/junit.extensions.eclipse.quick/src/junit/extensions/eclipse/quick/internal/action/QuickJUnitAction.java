@@ -21,7 +21,7 @@ public abstract class QuickJUnitAction implements IEditorActionDelegate, IObject
     private Shell shell;
     protected IJavaElement javaElement;
     protected ITextEditor javaEditor;
-        
+
     public void setActiveEditor(IAction action, IEditorPart targetEditor) {
         if (!(targetEditor instanceof ITextEditor)) {
             javaEditor = null;
@@ -36,7 +36,7 @@ public abstract class QuickJUnitAction implements IEditorActionDelegate, IObject
     }
 
     public void selectionChanged(IAction action, ISelection selection) {
-        if (! (selection instanceof IStructuredSelection)) {
+        if (!(selection instanceof IStructuredSelection)) {
             javaElement = null;
             return;
         }
@@ -46,6 +46,7 @@ public abstract class QuickJUnitAction implements IEditorActionDelegate, IObject
         else
             javaElement = null;
     }
+
     protected void openInformation(IAction action, String message) {
         MessageDialog.openInformation(shell, action.getText(), message);
     }
@@ -66,7 +67,7 @@ public abstract class QuickJUnitAction implements IEditorActionDelegate, IObject
         IJavaElement element = unit.getElementAt(offset);
         return element;
     }
-    
+
     protected ICompilationUnit getCompilationUnitOfJavaEditor() throws JavaModelException {
         if (javaEditor == null)
             return null;

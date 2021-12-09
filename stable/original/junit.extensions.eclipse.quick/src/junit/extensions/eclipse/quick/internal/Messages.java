@@ -16,10 +16,12 @@ public class Messages {
             return '!' + key + '!';
         }
     }
+
     public static String getString(String key, Object[] args) {
         return MessageFormat.format(RESOURCE_BUNDLE.getString(key), args);
     }
+
     public static String getString(String key, Object arg0) {
-        return MessageFormat.format(RESOURCE_BUNDLE.getString(key), new Object[] {arg0});
+        return MessageFormat.format(RESOURCE_BUNDLE.getString(key), new Object[] { arg0 });
     }
 }

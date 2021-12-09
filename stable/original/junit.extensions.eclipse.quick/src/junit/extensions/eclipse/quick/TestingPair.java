@@ -10,13 +10,12 @@ import java.util.regex.Pattern;
 public class TestingPair {
     private List namingRules = new ArrayList();
 
-
     public void addNamingRule(String rule) {
         namingRules.add(rule);
     }
 
     public void clearNamingRules() {
-        namingRules.clear();        
+        namingRules.clear();
     }
 
     public String[] getPairClassNames(String className) {
@@ -85,7 +84,7 @@ public class TestingPair {
         int index = className.lastIndexOf('.');
         if (index != -1) {
             typeName = className.substring(index + 1);
-            packageName = className.substring(0, index); 
+            packageName = className.substring(0, index);
         } else {
             typeName = className;
             packageName = null;

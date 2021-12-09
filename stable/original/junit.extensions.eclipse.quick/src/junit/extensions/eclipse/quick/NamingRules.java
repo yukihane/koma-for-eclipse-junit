@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
-
 public class NamingRules {
     private IPreferenceStore store;
     private final String STORE_ID = "NamingRules";
@@ -34,7 +33,6 @@ public class NamingRules {
         return (String[]) result.toArray(new String[result.size()]);
     }
 
-
     public void set(List namingRules) {
         store.setValue(STORE_ID, listToString(namingRules));
     }
@@ -53,13 +51,13 @@ public class NamingRules {
     private List stringToList(String string) {
         List result = new ArrayList();
         StringTokenizer st = new StringTokenizer(string, ",");
-        while(st.hasMoreTokens()) {
+        while (st.hasMoreTokens()) {
             String column = st.nextToken();
             int index = column.indexOf(':');
             if (index != -1) {
                 String value = column.substring(0, index);
                 Boolean enabled = Boolean.valueOf(column.substring(index + 1));
-                result.add(new NamingRule(value, enabled.booleanValue()));      
+                result.add(new NamingRule(value, enabled.booleanValue()));
             }
         }
         return result;
