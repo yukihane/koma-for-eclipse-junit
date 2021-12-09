@@ -96,7 +96,7 @@ public class JavaElements {
         if (!type.isClass())
             return false;
         final int flags = type.getFlags();
-        if (Flags.isAbstract(flags) || !Flags.isPublic(flags))
+        if (Flags.isAbstract(flags) || Flags.isPrivate(flags))
             return false;
 
         return true;
