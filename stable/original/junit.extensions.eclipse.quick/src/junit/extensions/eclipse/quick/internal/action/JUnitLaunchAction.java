@@ -12,11 +12,10 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-
 public class JUnitLaunchAction extends QuickJUnitAction {
     private String mode;
     private ILaunchShortcut launchShortcut;
-    
+
     public JUnitLaunchAction(ILaunchShortcut launchShortcut, String mode) {
         this.launchShortcut = launchShortcut;
         this.mode = mode;

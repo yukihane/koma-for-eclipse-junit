@@ -38,7 +38,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-
 public class NamingRulesPreference {
     private QuickJUnitPreferencePage preferencePage;
     private Shell shell;
@@ -57,13 +56,13 @@ public class NamingRulesPreference {
     public void create(List namingRulesValue, Composite parent) {
         this.namingRulesValue = namingRulesValue;
         shell = parent.getShell();
-        Composite container= new Composite(parent, SWT.NONE);
-        GridLayout layout= new GridLayout();
-        layout.numColumns= 2;
-        layout.marginHeight= 0;
-        layout.marginWidth= 0;
+        Composite container = new Composite(parent, SWT.NONE);
+        GridLayout layout = new GridLayout();
+        layout.numColumns = 2;
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
         container.setLayout(layout);
-        GridData gd= new GridData(GridData.FILL_BOTH);
+        GridData gd = new GridData(GridData.FILL_BOTH);
         container.setLayoutData(gd);
         createTable(container);
         createButtons(container);
@@ -80,7 +79,7 @@ public class NamingRulesPreference {
     }
 
     private void createTable(Composite container) {
-        Label label= new Label(container, SWT.NONE);
+        Label label = new Label(container, SWT.NONE);
         label.setText(Messages.getString("NamingRulesPreference.label")); //$NON-NLS-1$
         GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
         gd.horizontalSpan = 2;
@@ -88,12 +87,12 @@ public class NamingRulesPreference {
 
         Table table = new Table(container, SWT.CHECK | SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 
-        gd= new GridData(GridData.FILL_HORIZONTAL);
+        gd = new GridData(GridData.FILL_HORIZONTAL);
         table.setLayoutData(gd);
 
-        TableLayout tableLayout= new TableLayout();
-        ColumnLayoutData[] columnLayoutData= new ColumnLayoutData[1];
-        columnLayoutData[0]= new ColumnWeightData(100);
+        TableLayout tableLayout = new TableLayout();
+        ColumnLayoutData[] columnLayoutData = new ColumnLayoutData[1];
+        columnLayoutData[0] = new ColumnWeightData(100);
         tableLayout.addColumnData(columnLayoutData[0]);
         table.setLayout(tableLayout);
         new TableColumn(table, SWT.NONE);
@@ -123,34 +122,41 @@ public class NamingRulesPreference {
             }
         });
     }
+
     private static class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
         public String getColumnText(Object o, int column) {
             return column == 0 ? ((NamingRule) o).getValue() : ""; //$NON-NLS-1$
         }
+
         public String getText(Object element) {
             return ((NamingRule) element).getValue();
         }
+
         public Image getColumnImage(Object element, int columnIndex) {
             return null;
         }
     }
+
     private class TableContentProvider implements IStructuredContentProvider {
         public Object[] getElements(Object inputElement) {
             return namingRulesValue.toArray();
         }
+
         public void dispose() {
         }
+
         public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
         }
     }
+
     private void createButtons(Composite container) {
-        Composite buttonContainer= new Composite(container, SWT.NONE);
-        GridData gd= new GridData(GridData.FILL_VERTICAL);
+        Composite buttonContainer = new Composite(container, SWT.NONE);
+        GridData gd = new GridData(GridData.FILL_VERTICAL);
         buttonContainer.setLayoutData(gd);
-        GridLayout buttonLayout= new GridLayout();
-        buttonLayout.numColumns= 1;
-        buttonLayout.marginHeight= 0;
-        buttonLayout.marginWidth= 0;
+        GridLayout buttonLayout = new GridLayout();
+        buttonLayout.numColumns = 1;
+        buttonLayout.marginHeight = 0;
+        buttonLayout.marginWidth = 0;
         buttonContainer.setLayout(buttonLayout);
 
         Listener listener;
@@ -158,37 +164,43 @@ public class NamingRulesPreference {
         listener = new Listener() {
             public void handleEvent(Event e) {
                 addNamingRule();
-            }};
+            }
+        };
         createButton("addButton", buttonContainer, listener, true); //$NON-NLS-1$
 
         listener = new Listener() {
             public void handleEvent(Event e) {
                 removeNamingRules();
-            }};
+            }
+        };
         removeButton = createButton("removeButton", buttonContainer, listener, false); //$NON-NLS-1$
         removeButton.setEnabled(false);
 
         listener = new Listener() {
             public void handleEvent(Event e) {
                 editNamingRule();
-            }};
+            }
+        };
         editButton = createButton("editButton", buttonContainer, listener, false); //$NON-NLS-1$
         editButton.setEnabled(false);
 
         listener = new Listener() {
             public void handleEvent(Event e) {
                 moveNamingRule(true);
-            }};
+            }
+        };
         moveUpButton = createButton("moveUpButton", buttonContainer, listener, false); //$NON-NLS-1$
         moveUpButton.setEnabled(false);
 
         listener = new Listener() {
             public void handleEvent(Event e) {
                 moveNamingRule(false);
-            }};
+            }
+        };
         moveDownButton = createButton("moveDownButton", buttonContainer, listener, false); //$NON-NLS-1$
         moveDownButton.setEnabled(false);
-     }
+    }
+
     private void update() {
         tableViewer.refresh();
         for (int i = 0; i < namingRulesValue.size(); ++i) {
@@ -203,16 +215,17 @@ public class NamingRulesPreference {
         removeButton.setEnabled(!selection.isEmpty());
         editButton.setEnabled(selection.size() == 1);
         int rowCount = tableViewer.getTable().getItemCount();
-        boolean canMove = selection.size() == 1 &&  rowCount > 1;
+        boolean canMove = selection.size() == 1 && rowCount > 1;
         if (!canMove) {
             moveUpButton.setEnabled(false);
             moveDownButton.setEnabled(false);
         } else {
-           int selectedIndex = namingRulesValue.indexOf(selection.getFirstElement());
-           moveUpButton.setEnabled(0 < selectedIndex);
-           moveDownButton.setEnabled(selectedIndex < rowCount - 1);
+            int selectedIndex = namingRulesValue.indexOf(selection.getFirstElement());
+            moveUpButton.setEnabled(0 < selectedIndex);
+            moveDownButton.setEnabled(selectedIndex < rowCount - 1);
         }
     }
+
     private void editNamingRule() {
         IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
         if (selection.isEmpty())
@@ -227,11 +240,13 @@ public class NamingRulesPreference {
             }
         }
     }
+
     private InputDialog createEditDialog(String messageId, String initValue) {
         String title = Messages.getString("NamingRulesPreference." + messageId + ".dialog.title"); //$NON-NLS-1$ //$NON-NLS-2$
         String message = Messages.getString("NamingRulesPreference." + messageId + ".dialog.message"); //$NON-NLS-1$ //$NON-NLS-2$
-        return  new InputDialog(shell, title, message, initValue, new NamingRuleValidator());
+        return new InputDialog(shell, title, message, initValue, new NamingRuleValidator());
     }
+
     private static class NamingRuleValidator implements IInputValidator {
         public String isValid(String newText) {
             newText = newText.trim();
@@ -243,7 +258,7 @@ public class NamingRulesPreference {
 
             StringTokenizer st = new StringTokenizer(newText, ".", true); //$NON-NLS-1$
             boolean dot = false;
-            while(st.hasMoreTokens()) {
+            while (st.hasMoreTokens()) {
                 String token = st.nextToken();
                 if (dot) {
                     if (!token.equals(".")) { //$NON-NLS-1$
@@ -258,16 +273,18 @@ public class NamingRulesPreference {
             }
             return null;
         }
+
         private boolean isJavaIdentifier(String token) {
             if (!Character.isJavaIdentifierStart(token.charAt(0)))
                 return false;
             for (int i = 1; i < token.length(); ++i) {
                 if (!Character.isJavaIdentifierPart(token.charAt(i)))
-                return false;
+                    return false;
             }
             return true;
         }
     }
+
     private void addNamingRule() {
         InputDialog dialog = createEditDialog("addNamingRule", ""); //$NON-NLS-1$ //$NON-NLS-2$
         if (dialog.open() == Window.OK) {
@@ -279,30 +296,33 @@ public class NamingRulesPreference {
             }
         }
     }
+
     private void removeNamingRules() {
         IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
         if (selection.isEmpty())
             return;
-        for (Iterator i = selection.iterator(); i.hasNext(); ) {
-             namingRulesValue.remove(i.next());
+        for (Iterator i = selection.iterator(); i.hasNext();) {
+            namingRulesValue.remove(i.next());
         }
         update();
     }
+
     private void moveNamingRule(boolean up) {
         IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
         if (selection.isEmpty() || selection.size() > 1)
             return;
         Object selected = selection.getFirstElement();
         int oldIndex = namingRulesValue.indexOf(selected);
-        int newIndex = up ? oldIndex - 1: oldIndex + 1;
+        int newIndex = up ? oldIndex - 1 : oldIndex + 1;
         if (newIndex < 0 || namingRulesValue.size() <= newIndex)
             return;
         namingRulesValue.remove(oldIndex);
         namingRulesValue.add(newIndex, selected);
         update();
     }
+
     private Button createButton(String buttonId, Composite buttonContainer, Listener listener, boolean isTop) {
-        Button button= new Button(buttonContainer, SWT.PUSH);
+        Button button = new Button(buttonContainer, SWT.PUSH);
         button.setText(Messages.getString("NamingRulesPreference." + buttonId + ".label")); //$NON-NLS-1$ //$NON-NLS-2$
         button.setToolTipText(Messages.getString("NamingRulesPreference." + buttonId + ".tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
         GridData gd;

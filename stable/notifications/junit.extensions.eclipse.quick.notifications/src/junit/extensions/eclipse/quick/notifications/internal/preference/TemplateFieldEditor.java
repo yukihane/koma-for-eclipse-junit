@@ -34,7 +34,7 @@ public class TemplateFieldEditor extends FieldEditor {
 
     /**
      * Validation strategy constant (value <code>1</code>) indicating that
-     * the editor should perform validation only when the text widget 
+     * the editor should perform validation only when the text widget
      * loses focus.
      *
      * @see #setValidateStrategy
@@ -54,6 +54,7 @@ public class TemplateFieldEditor extends FieldEditor {
 
     /**
      * Old text value.
+     * 
      * @since 3.4 this field is protected.
      */
     protected String oldValue;
@@ -67,7 +68,7 @@ public class TemplateFieldEditor extends FieldEditor {
      * Width of text field in characters; initially unlimited.
      */
     @SuppressWarnings("unused")
-	private int widthInChars = UNLIMITED;
+    private int widthInChars = UNLIMITED;
 
     /**
      * Text limit of text field in characters; initially unlimited.
@@ -86,13 +87,13 @@ public class TemplateFieldEditor extends FieldEditor {
     private boolean emptyStringAllowed = true;
 
     /**
-     * The validation strategy; 
+     * The validation strategy;
      * <code>VALIDATE_ON_KEY_STROKE</code> by default.
      */
     private int validateStrategy = VALIDATE_ON_KEY_STROKE;
 
     /**
-     * Creates a new string field editor 
+     * Creates a new string field editor
      */
     protected TemplateFieldEditor() {
     }
@@ -104,21 +105,21 @@ public class TemplateFieldEditor extends FieldEditor {
      * @param name the name of the preference this field editor works on
      * @param labelText the label text of the field editor
      * @param width the width of the text input field in characters,
-     *  or <code>UNLIMITED</code> for no limit
+     * or <code>UNLIMITED</code> for no limit
      * @param strategy either <code>VALIDATE_ON_KEY_STROKE</code> to perform
-     *  on the fly checking (the default), or <code>VALIDATE_ON_FOCUS_LOST</code> to
-     *  perform validation only after the text has been typed in
+     * on the fly checking (the default), or <code>VALIDATE_ON_FOCUS_LOST</code> to
+     * perform validation only after the text has been typed in
      * @param parent the parent of the field editor's control
      * @since 2.0
      */
     public TemplateFieldEditor(String name, String labelText, int width,
-            int strategy, Composite parent) {
+        int strategy, Composite parent) {
         init(name, labelText);
         widthInChars = width;
         setValidateStrategy(strategy);
         isValid = false;
         errorMessage = JFaceResources
-                .getString("StringFieldEditor.errorMessage");//$NON-NLS-1$
+            .getString("StringFieldEditor.errorMessage");//$NON-NLS-1$
         createControl(parent);
     }
 
@@ -129,11 +130,11 @@ public class TemplateFieldEditor extends FieldEditor {
      * @param name the name of the preference this field editor works on
      * @param labelText the label text of the field editor
      * @param width the width of the text input field in characters,
-     *  or <code>UNLIMITED</code> for no limit
+     * or <code>UNLIMITED</code> for no limit
      * @param parent the parent of the field editor's control
      */
     public TemplateFieldEditor(String name, String labelText, int width,
-            Composite parent) {
+        Composite parent) {
         this(name, labelText, width, VALIDATE_ON_KEY_STROKE, parent);
     }
 
@@ -165,17 +166,17 @@ public class TemplateFieldEditor extends FieldEditor {
      * Checks whether the text input field contains a valid value or not.
      *
      * @return <code>true</code> if the field value is valid,
-     *   and <code>false</code> if invalid
+     * and <code>false</code> if invalid
      */
     protected boolean checkState() {
         boolean result = false;
         if (emptyStringAllowed) {
-			result = true;
-		}
+            result = true;
+        }
 
         if (textField == null) {
-			result = false;
-		}
+            result = false;
+        }
 
         String txt = textField.getText();
 
@@ -185,10 +186,10 @@ public class TemplateFieldEditor extends FieldEditor {
         result = result && doCheckState();
 
         if (result) {
-			clearErrorMessage();
-		} else {
-			showErrorMessage(errorMessage);
-		}
+            clearErrorMessage();
+        } else {
+            showErrorMessage(errorMessage);
+        }
 
         return result;
     }
@@ -197,12 +198,12 @@ public class TemplateFieldEditor extends FieldEditor {
      * Hook for subclasses to do specific state checks.
      * <p>
      * The default implementation of this framework method does
-     * nothing and returns <code>true</code>.  Subclasses should 
+     * nothing and returns <code>true</code>. Subclasses should
      * override this method to specific state checks.
      * </p>
      *
      * @return <code>true</code> if the field value is valid,
-     *   and <code>false</code> if invalid
+     * and <code>false</code> if invalid
      */
     protected boolean doCheckState() {
         return true;
@@ -222,27 +223,27 @@ public class TemplateFieldEditor extends FieldEditor {
         textField = getTextControl(parent);
         GridData gd = new GridData();
         gd.horizontalSpan = numColumns - 1;
-//        if (widthInChars != UNLIMITED) {
-//            GC gc = new GC(textField);
-//            try {
-//                Point extent = gc.textExtent("X");//$NON-NLS-1$
-//                gd.widthHint = widthInChars * extent.x;
-//            } finally {
-//                gc.dispose();
-//            }
-//        } else {
-//            gd.horizontalAlignment = GridData.FILL;
-//            gd.grabExcessHorizontalSpace = true;
-//        }
-		GC gc = new GC(textField);
-		try {
-			Point textExtent = gc.textExtent("X");//$NON-NLS-1$
-			gd.heightHint = textExtent.y * 3;
-			gd.horizontalAlignment = GridData.FILL;
-			gd.grabExcessHorizontalSpace = true;
-		} finally{
-			gc.dispose();
-		}
+        //        if (widthInChars != UNLIMITED) {
+        //            GC gc = new GC(textField);
+        //            try {
+        //                Point extent = gc.textExtent("X");//$NON-NLS-1$
+        //                gd.widthHint = widthInChars * extent.x;
+        //            } finally {
+        //                gc.dispose();
+        //            }
+        //        } else {
+        //            gd.horizontalAlignment = GridData.FILL;
+        //            gd.grabExcessHorizontalSpace = true;
+        //        }
+        GC gc = new GC(textField);
+        try {
+            Point textExtent = gc.textExtent("X");//$NON-NLS-1$
+            gd.heightHint = textExtent.y * 3;
+            gd.horizontalAlignment = GridData.FILL;
+            gd.grabExcessHorizontalSpace = true;
+        } finally {
+            gc.dispose();
+        }
 
         textField.setLayoutData(gd);
     }
@@ -264,7 +265,7 @@ public class TemplateFieldEditor extends FieldEditor {
     protected void doLoadDefault() {
         if (textField != null) {
             String value = getPreferenceStore().getDefaultString(
-                    getPreferenceName());
+                getPreferenceName());
             textField.setText(value);
         }
         valueChanged();
@@ -278,7 +279,7 @@ public class TemplateFieldEditor extends FieldEditor {
     }
 
     /**
-     * Returns the error message that will be displayed when and if 
+     * Returns the error message that will be displayed when and if
      * an error occurs.
      *
      * @return the error message, or <code>null</code> if none
@@ -301,9 +302,9 @@ public class TemplateFieldEditor extends FieldEditor {
      */
     public String getStringValue() {
         if (textField != null) {
-			return textField.getText();
-		}
-        
+            return textField.getText();
+        }
+
         return getPreferenceStore().getString(getPreferenceName());
     }
 
@@ -331,46 +332,45 @@ public class TemplateFieldEditor extends FieldEditor {
             textField = new Text(parent, SWT.MULTI | SWT.LEAD | SWT.BORDER | SWT.WRAP);
             textField.setFont(parent.getFont());
             switch (validateStrategy) {
-            case VALIDATE_ON_KEY_STROKE:
-                textField.addKeyListener(new KeyAdapter() {
+                case VALIDATE_ON_KEY_STROKE:
+                    textField.addKeyListener(new KeyAdapter() {
 
-                    /* (non-Javadoc)
-                     * @see org.eclipse.swt.events.KeyAdapter#keyReleased(org.eclipse.swt.events.KeyEvent)
-                     */
-                    public void keyReleased(KeyEvent e) {
-                        valueChanged();
-                    }
-                });
-                textField.addFocusListener(new FocusAdapter() {
-                	// Ensure that the value is checked on focus loss in case we
-                	// missed a keyRelease or user hasn't released key.
-                	// See https://bugs.eclipse.org/bugs/show_bug.cgi?id=214716
-                    public void focusLost(FocusEvent e) {
-                        valueChanged();
-                    }
-                });
- 
+                        /* (non-Javadoc)
+                         * @see org.eclipse.swt.events.KeyAdapter#keyReleased(org.eclipse.swt.events.KeyEvent)
+                         */
+                        public void keyReleased(KeyEvent e) {
+                            valueChanged();
+                        }
+                    });
+                    textField.addFocusListener(new FocusAdapter() {
+                        // Ensure that the value is checked on focus loss in case we
+                        // missed a keyRelease or user hasn't released key.
+                        // See https://bugs.eclipse.org/bugs/show_bug.cgi?id=214716
+                        public void focusLost(FocusEvent e) {
+                            valueChanged();
+                        }
+                    });
 
-                break;
-            case VALIDATE_ON_FOCUS_LOST:
-                textField.addKeyListener(new KeyAdapter() {
-                    public void keyPressed(KeyEvent e) {
-                        clearErrorMessage();
-                    }
-                });
-                textField.addFocusListener(new FocusAdapter() {
-                    public void focusGained(FocusEvent e) {
-                        refreshValidState();
-                    }
+                    break;
+                case VALIDATE_ON_FOCUS_LOST:
+                    textField.addKeyListener(new KeyAdapter() {
+                        public void keyPressed(KeyEvent e) {
+                            clearErrorMessage();
+                        }
+                    });
+                    textField.addFocusListener(new FocusAdapter() {
+                        public void focusGained(FocusEvent e) {
+                            refreshValidState();
+                        }
 
-                    public void focusLost(FocusEvent e) {
-                        valueChanged();
-                        clearErrorMessage();
-                    }
-                });
-                break;
-            default:
-                Assert.isTrue(false, "Unknown validate strategy");//$NON-NLS-1$
+                        public void focusLost(FocusEvent e) {
+                            valueChanged();
+                            clearErrorMessage();
+                        }
+                    });
+                    break;
+                default:
+                    Assert.isTrue(false, "Unknown validate strategy");//$NON-NLS-1$
             }
             textField.addDisposeListener(new DisposeListener() {
                 public void widgetDisposed(DisposeEvent event) {
@@ -390,7 +390,7 @@ public class TemplateFieldEditor extends FieldEditor {
      * Returns whether an empty string is a valid value.
      *
      * @return <code>true</code> if an empty string is a valid value, and
-     *  <code>false</code> if an empty string is invalid
+     * <code>false</code> if an empty string is invalid
      * @see #setEmptyStringAllowed
      */
     public boolean isEmptyStringAllowed() {
@@ -415,14 +415,14 @@ public class TemplateFieldEditor extends FieldEditor {
      * Sets whether the empty string is a valid value or not.
      *
      * @param b <code>true</code> if the empty string is allowed,
-     *  and <code>false</code> if it is considered invalid
+     * and <code>false</code> if it is considered invalid
      */
     public void setEmptyStringAllowed(boolean b) {
         emptyStringAllowed = b;
     }
 
     /**
-     * Sets the error message that will be displayed when and if 
+     * Sets the error message that will be displayed when and if
      * an error occurs.
      *
      * @param message the error message
@@ -448,8 +448,8 @@ public class TemplateFieldEditor extends FieldEditor {
     public void setStringValue(String value) {
         if (textField != null) {
             if (value == null) {
-				value = "";//$NON-NLS-1$
-			}
+                value = "";//$NON-NLS-1$
+            }
             oldValue = textField.getText();
             if (!oldValue.equals(value)) {
                 textField.setText(value);
@@ -462,14 +462,14 @@ public class TemplateFieldEditor extends FieldEditor {
      * Sets this text field's text limit.
      *
      * @param limit the limit on the number of character in the text
-     *  input field, or <code>UNLIMITED</code> for no limit
-
+     * input field, or <code>UNLIMITED</code> for no limit
+     * 
      */
     public void setTextLimit(int limit) {
         textLimit = limit;
         if (textField != null) {
-			textField.setTextLimit(limit);
-		}
+            textField.setTextLimit(limit);
+        }
     }
 
     /**
@@ -477,17 +477,17 @@ public class TemplateFieldEditor extends FieldEditor {
      * <p>
      * Calling this method has no effect after <code>createPartControl</code>
      * is called. Thus this method is really only useful for subclasses to call
-     * in their constructor. However, it has public visibility for backward 
+     * in their constructor. However, it has public visibility for backward
      * compatibility.
      * </p>
      *
      * @param value either <code>VALIDATE_ON_KEY_STROKE</code> to perform
-     *  on the fly checking (the default), or <code>VALIDATE_ON_FOCUS_LOST</code> to
-     *  perform validation only after the text has been typed in
+     * on the fly checking (the default), or <code>VALIDATE_ON_FOCUS_LOST</code> to
+     * perform validation only after the text has been typed in
      */
     public void setValidateStrategy(int value) {
         Assert.isTrue(value == VALIDATE_ON_FOCUS_LOST
-                || value == VALIDATE_ON_KEY_STROKE);
+            || value == VALIDATE_ON_KEY_STROKE);
         validateStrategy = value;
     }
 
@@ -503,7 +503,7 @@ public class TemplateFieldEditor extends FieldEditor {
      * to the value (<code>VALUE</code> property) provided that the old and
      * new values are different.
      * <p>
-     * This hook is <em>not</em> called when the text is initialized 
+     * This hook is <em>not</em> called when the text is initialized
      * (or reset to the default value) from the preference store.
      * </p>
      */
@@ -513,8 +513,8 @@ public class TemplateFieldEditor extends FieldEditor {
         refreshValidState();
 
         if (isValid != oldState) {
-			fireStateChanged(IS_VALID, oldState, isValid);
-		}
+            fireStateChanged(IS_VALID, oldState, isValid);
+        }
 
         String newValue = textField.getText();
         if (!newValue.equals(oldValue)) {
