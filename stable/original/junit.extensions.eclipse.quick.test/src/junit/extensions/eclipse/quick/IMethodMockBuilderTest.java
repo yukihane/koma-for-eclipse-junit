@@ -25,7 +25,7 @@ public class IMethodMockBuilderTest {
     @Test
     public void should_build_mock_object() throws Exception {
 
-        IMethod result = builder.build();
+        final IMethod result = builder.build();
         assertThat(result, is(instanceOf(IMethod.class)));
 
     }
@@ -33,7 +33,7 @@ public class IMethodMockBuilderTest {
     @Test
     public void normal_method_should_initialized() throws Exception {
 
-        IMethod result = builder.normal_method().build();
+        final IMethod result = builder.normal_method().build();
 
         assertThat(result, is(instanceOf(IMethod.class)));
         assertThat(Flags.isPublic(result.getFlags()), is(true));
@@ -45,7 +45,7 @@ public class IMethodMockBuilderTest {
     @Test
     public void should_change_by_set_name() throws Exception {
 
-        IMethod result = builder.normal_method().setName("shouldChanged").build();
+        final IMethod result = builder.normal_method().setName("shouldChanged").build();
         assertThat(result.getElementName(), is("shouldChanged"));
 
     }
@@ -53,15 +53,15 @@ public class IMethodMockBuilderTest {
     @Test
     public void should_by_add_test_annotation() throws Exception {
 
-        IMethod result = builder.normal_method().addTestAnnotation().build();
+        final IMethod result = builder.normal_method().addTestAnnotation().build();
 
         hasTestAnnotation(result);
 
     }
 
-    private void hasTestAnnotation(IMethod result) throws JavaModelException {
+    private void hasTestAnnotation(final IMethod result) throws JavaModelException {
         assertThat(result.getSource().indexOf("@Test"), is(not(-1)));
-        IAnnotation[] annotations = result.getAnnotations();
+        final IAnnotation[] annotations = result.getAnnotations();
         assertThat(annotations.length, is(1));
         assertThat(annotations[0].getElementName(), is("org.junit.Test"));
     }
@@ -69,7 +69,7 @@ public class IMethodMockBuilderTest {
     @Test
     public void should_set_number_of_parameters() throws Exception {
 
-        IMethod result = builder.normal_method().setNumberOfParameters(2).build();
+        final IMethod result = builder.normal_method().setNumberOfParameters(2).build();
         assertThat(result.getNumberOfParameters(), is(2));
 
     }
@@ -77,7 +77,7 @@ public class IMethodMockBuilderTest {
     @Test
     public void should_set_private_mode() throws Exception {
 
-        IMethod result = builder.normal_method().setPrivate().build();
+        final IMethod result = builder.normal_method().setPrivate().build();
         assertThat(Flags.isPrivate(result.getFlags()), is(true));
         assertThat(Flags.isPublic(result.getFlags()), is(false));
 
@@ -86,7 +86,7 @@ public class IMethodMockBuilderTest {
     @Test
     public void should_set_protcted_mode() throws Exception {
 
-        IMethod result = builder.normal_method().setProtected().build();
+        final IMethod result = builder.normal_method().setProtected().build();
         assertThat(Flags.isProtected(result.getFlags()), is(true));
         assertThat(Flags.isPublic(result.getFlags()), is(false));
 
@@ -95,7 +95,7 @@ public class IMethodMockBuilderTest {
     @Test
     public void should_set_static_mode() throws Exception {
 
-        IMethod result = builder.normal_method().setStatic().build();
+        final IMethod result = builder.normal_method().setStatic().build();
         assertThat(Flags.isStatic(result.getFlags()), is(true));
         assertThat(Flags.isPublic(result.getFlags()), is(true));
 
@@ -121,7 +121,7 @@ public class IMethodMockBuilderTest {
     @Test
     public void junit4_should_initialized_these_setting() throws Exception {
 
-        IMethod result = builder.junit4_method().build();
+        final IMethod result = builder.junit4_method().build();
 
         assertThat(result, is(instanceOf(IMethod.class)));
         assertThat(Flags.isPublic(result.getFlags()), is(true));
@@ -133,7 +133,7 @@ public class IMethodMockBuilderTest {
     @Test
     public void junit3_should_initialized_these_setting() throws Exception {
 
-        IMethod result = builder.junit3_method().build();
+        final IMethod result = builder.junit3_method().build();
 
         assertThat(result, is(instanceOf(IMethod.class)));
         assertThat(Flags.isPublic(result.getFlags()), is(true));

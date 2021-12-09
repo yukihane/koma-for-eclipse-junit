@@ -1,10 +1,8 @@
 package junit.extensions.eclipse.quick.notifications.internal;
 
 import java.util.Date;
-
 import junit.extensions.eclipse.quick.notifications.ImageDesc;
 import junit.extensions.eclipse.quick.notifications.internal.preference.Preference;
-
 import org.eclipse.jdt.junit.model.ITestElement.Result;
 import org.eclipse.jdt.junit.model.ITestRunSession;
 import org.eclipse.mylyn.commons.notifications.core.AbstractNotification;
@@ -16,17 +14,17 @@ class JUnitNotification extends AbstractUiNotification {
     private static final TemplateParser parser = new TemplateParser();
     private String resultLabel;
     private Image kind;
-    private Result testResult;
-    private String description;
-    private String label;
+    private final Result testResult;
+    private final String description;
+    private final String label;
     private static final String TEST_OK = "Test OK";
     private static final String TEST_FAILURE = "Test FAILED";
     private static final String TEST_ERROR = "Test ERROR";
 
-    JUnitNotification(String eventId,
-        Result testResult, ITestRunSession session) {
+    JUnitNotification(final String eventId,
+        final Result testResult, final ITestRunSession session) {
         super(eventId);
-        String template = Preference.TEMPLATE.getValue();
+        final String template = Preference.TEMPLATE.getValue();
         parser.setTemplate(template);
         this.testResult = testResult;
         if (Result.ERROR.equals(testResult)) {
@@ -43,11 +41,11 @@ class JUnitNotification extends AbstractUiNotification {
         this.description = parser.parseTemplate(session);
     }
 
-    String pickupTestClassAndMethod(String testName) {
+    String pickupTestClassAndMethod(final String testName) {
         if (testName == null)
             return null;
         if (testName.indexOf('.') != 0) {
-            String[] split = testName.split("\\."); //$NON-NLS-1$
+            final String[] split = testName.split("\\."); //$NON-NLS-1$
             if (split.length > 2) {
                 return split[split.length - 2] + "." + split[split.length - 1]; //$NON-NLS-1$
             }
@@ -55,8 +53,8 @@ class JUnitNotification extends AbstractUiNotification {
         return testName;
     }
 
-    @SuppressWarnings("rawtypes")
-    public Object getAdapter(Class adapter) {
+    @Override @SuppressWarnings("rawtypes")
+    public Object getAdapter(final Class adapter) {
         if (adapter == null)
             return null;
         if (adapter.equals(Result.class)) {
@@ -65,7 +63,8 @@ class JUnitNotification extends AbstractUiNotification {
         return null;
     }
 
-    public int compareTo(AbstractNotification o) {
+    @Override
+    public int compareTo(final AbstractNotification o) {
         return 0;
     }
 

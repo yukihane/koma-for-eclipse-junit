@@ -7,10 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import junit.extensions.eclipse.quick.internal.ExtensionSupport;
 import junit.extensions.eclipse.quick.internal.QuickJUnitPlugin;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,7 +46,8 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
 
     private static final String EMPTY_STRING = "";
 
-    public void launch(ISelection selection, String mode) {
+    @Override
+    public void launch(final ISelection selection, final String mode) {
         if (selection instanceof IStructuredSelection) {
             launch(((IStructuredSelection) selection).toArray(), mode);
         } else {
@@ -56,7 +55,7 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
         }
     }
 
-    private void launch(Object[] elements, String mode) {
+    private void launch(final Object[] elements, final String mode) {
         try {
             IJavaElement elementToLaunch = null;
 
@@ -66,7 +65,7 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
                     selected = ((IAdaptable) selected).getAdapter(IJavaElement.class);
                 }
                 if (selected instanceof IJavaElement) {
-                    IJavaElement element = (IJavaElement) selected;
+                    final IJavaElement element = (IJavaElement) selected;
                     switch (element.getElementType()) {
                         case IJavaElement.JAVA_PROJECT:
                         case IJavaElement.PACKAGE_FRAGMENT_ROOT:
@@ -89,26 +88,27 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
                 return;
             }
             performLaunch(elementToLaunch, mode);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             // OK, silently move on
-        } catch (CoreException e) {
+        } catch (final CoreException e) {
             getPlugin().logSystemError(e, this);
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException e) {
             getPlugin().logSystemError(e, this);
         }
     }
 
-    private void performLaunch(IJavaElement element, String mode) throws InterruptedException, CoreException {
-        ILaunchConfigurationWorkingCopy temporary = createLaunchConfiguration(element);
+    private void performLaunch(final IJavaElement element, final String mode)
+        throws InterruptedException, CoreException {
+        final ILaunchConfigurationWorkingCopy temporary = createLaunchConfiguration(element);
         ILaunchConfiguration config = findExistingLaunchConfiguration(temporary, mode);
         if (config == null) {
             // no existing found: create a new one
-            ILaunchConfiguration[] configs = getLaunchManager().getLaunchConfigurations(temporary.getType());
+            final ILaunchConfiguration[] configs = getLaunchManager().getLaunchConfigurations(temporary.getType());
             ILaunchConfiguration qjDefault;
             for (int i = 0; i < configs.length; i++) {
                 if (ExtensionSupport.QUICK_JUNIT_DEFAULT.equals(configs[i].getName())) {
                     qjDefault = configs[i];
-                    Map attributes = qjDefault.getAttributes();
+                    final Map attributes = qjDefault.getAttributes();
                     setDefaultAttributes(temporary, attributes);
                 }
             }
@@ -123,30 +123,31 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
     }
 
     private void setDefaultAttributes(
-        ILaunchConfigurationWorkingCopy temporary, Map attributes) {
-        Iterator itr = attributes.keySet().iterator();
+        final ILaunchConfigurationWorkingCopy temporary, final Map attributes) {
+        final Iterator itr = attributes.keySet().iterator();
         for (Object obj = null; itr.hasNext();) {
             obj = itr.next();
-            String key = (String) obj;
+            final String key = (String) obj;
             boolean contains = false;
             try {
                 contains = attributes.containsKey(key);
-            } catch (NullPointerException e) {
+            } catch (final NullPointerException e) {
                 continue;
             }
             if (contains && KEY_SET.contains(key)) {
-                Object object = attributes.get(key);
+                final Object object = attributes.get(key);
                 if (object != null) {
-                    String value = object.toString();
+                    final String value = object.toString();
                     temporary.setAttribute(key, value);
                 }
             }
         }
     }
 
-    private ILaunchConfiguration findExistingLaunchConfiguration(ILaunchConfigurationWorkingCopy temporary, String mode)
+    private ILaunchConfiguration findExistingLaunchConfiguration(final ILaunchConfigurationWorkingCopy temporary,
+        final String mode)
         throws InterruptedException, CoreException {
-        List candidateConfigs = findExistingLaunchConfigurations(temporary);
+        final List candidateConfigs = findExistingLaunchConfigurations(temporary);
 
         // If there are no existing configs associated with the IType, create
         // one.
@@ -154,7 +155,7 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
         // Otherwise, if there is more than one config associated with the
         // IType, prompt the
         // user to choose one.
-        int candidateCount = candidateConfigs.size();
+        final int candidateCount = candidateConfigs.size();
         if (candidateCount == 0) {
             return null;
         } else if (candidateCount == 1) {
@@ -164,7 +165,7 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
             // cancelled the dialog, in which case this method returns null,
             // since cancelling the dialog should also cancel launching
             // anything.
-            ILaunchConfiguration config = chooseConfiguration(candidateConfigs, mode);
+            final ILaunchConfiguration config = chooseConfiguration(candidateConfigs, mode);
             if (config != null) {
                 return config;
             }
@@ -172,9 +173,10 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
         return null;
     }
 
-    private ILaunchConfiguration chooseConfiguration(List configList, String mode) throws InterruptedException {
-        IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
-        ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(), labelProvider);
+    private ILaunchConfiguration chooseConfiguration(final List configList, final String mode)
+        throws InterruptedException {
+        final IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
+        final ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(), labelProvider);
         dialog.setElements(configList.toArray());
         dialog.setTitle(JUnitMessages.JUnitLaunchShortcut_message_selectConfiguration);
         if (mode.equals(ILaunchManager.DEBUG_MODE)) {
@@ -183,22 +185,23 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
             dialog.setMessage(JUnitMessages.JUnitLaunchShortcut_message_selectRunConfiguration);
         }
         dialog.setMultipleSelection(false);
-        int result = dialog.open();
+        final int result = dialog.open();
         if (result == Window.OK) {
             return (ILaunchConfiguration) dialog.getFirstResult();
         }
         throw new InterruptedException(); // cancelled by user
     }
 
-    private List findExistingLaunchConfigurations(ILaunchConfigurationWorkingCopy temporary) throws CoreException {
-        ILaunchConfigurationType configType = temporary.getType();
+    private List findExistingLaunchConfigurations(final ILaunchConfigurationWorkingCopy temporary)
+        throws CoreException {
+        final ILaunchConfigurationType configType = temporary.getType();
 
-        ILaunchConfiguration[] configs = getLaunchManager().getLaunchConfigurations(configType);
-        String[] attributeToCompare = getAttributeNamesToCompare();
+        final ILaunchConfiguration[] configs = getLaunchManager().getLaunchConfigurations(configType);
+        final String[] attributeToCompare = getAttributeNamesToCompare();
 
-        ArrayList candidateConfigs = new ArrayList(configs.length);
+        final ArrayList candidateConfigs = new ArrayList(configs.length);
         for (int i = 0; i < configs.length; i++) {
-            ILaunchConfiguration config = configs[i];
+            final ILaunchConfiguration config = configs[i];
             if (hasSameAttributes(config, temporary, attributeToCompare)) {
                 candidateConfigs.add(config);
             }
@@ -206,6 +209,7 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
         return candidateConfigs;
     }
 
+    @Override
     protected String[] getAttributeNamesToCompare() {
         return new String[] {
             IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, JUnitLaunchConfigurationConstants.ATTR_TEST_CONTAINER,
@@ -214,26 +218,26 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
         };
     }
 
-    private static boolean hasSameAttributes(ILaunchConfiguration config1, ILaunchConfiguration config2,
-        String[] attributeToCompare) {
+    private static boolean hasSameAttributes(final ILaunchConfiguration config1, final ILaunchConfiguration config2,
+        final String[] attributeToCompare) {
         try {
             for (int i = 0; i < attributeToCompare.length; i++) {
-                String val1 = config1.getAttribute(attributeToCompare[i], EMPTY_STRING);
-                String val2 = config2.getAttribute(attributeToCompare[i], EMPTY_STRING);
+                final String val1 = config1.getAttribute(attributeToCompare[i], EMPTY_STRING);
+                final String val2 = config2.getAttribute(attributeToCompare[i], EMPTY_STRING);
                 if (!val1.equals(val2)) {
                     return false;
                 }
             }
             return true;
-        } catch (CoreException e) {
+        } catch (final CoreException e) {
             // ignore access problems here, return false
         }
         return false;
     }
 
-    private IType findTypeToLaunch(ICompilationUnit cu, String mode)
+    private IType findTypeToLaunch(final ICompilationUnit cu, final String mode)
         throws InterruptedException, InvocationTargetException {
-        IType[] types = findTypesToLaunch(cu);
+        final IType[] types = findTypesToLaunch(cu);
         if (types.length == 0) {
             return null;
         } else if (types.length > 1) {
@@ -242,8 +246,8 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
         return types[0];
     }
 
-    private IType chooseType(IType[] types, String mode) throws InterruptedException {
-        ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(),
+    private IType chooseType(final IType[] types, final String mode) throws InterruptedException {
+        final ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(),
             new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_POST_QUALIFIED));
         dialog.setElements(types);
         dialog.setTitle(JUnitMessages.JUnitLaunchShortcut_dialog_title2);
@@ -263,11 +267,12 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
         throws InterruptedException, InvocationTargetException {
         final ITestKind testKind = TestKindRegistry.getContainerTestKind(cu);
         final Set result = new HashSet();
-        IRunnableWithProgress runnable = new IRunnableWithProgress() {
-            public void run(IProgressMonitor pm) throws InterruptedException, InvocationTargetException {
+        final IRunnableWithProgress runnable = new IRunnableWithProgress() {
+            @Override
+            public void run(final IProgressMonitor pm) throws InterruptedException, InvocationTargetException {
                 try {
                     testKind.getFinder().findTestsInContainer(cu, result, pm);
-                } catch (CoreException e) {
+                } catch (final CoreException e) {
                     throw new InvocationTargetException(e);
                 }
             }
@@ -282,7 +287,7 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
     }
 
     private Shell getShell() {
-        IWorkbenchWindow workBenchWindow = getWorkbenchWindow();
+        final IWorkbenchWindow workBenchWindow = getWorkbenchWindow();
         return getActiveShell(workBenchWindow);
     }
 
@@ -290,7 +295,7 @@ public class QuickJUnitLaunchShortcut extends JUnitLaunchShortcut {
         return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
     }
 
-    private Shell getActiveShell(IWorkbenchWindow workBenchWindow) {
+    private Shell getActiveShell(final IWorkbenchWindow workBenchWindow) {
         if (workBenchWindow == null)
             return null;
         return workBenchWindow.getShell();

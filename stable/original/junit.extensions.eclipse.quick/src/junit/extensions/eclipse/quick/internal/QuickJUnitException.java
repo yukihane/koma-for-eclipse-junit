@@ -7,19 +7,19 @@ import org.eclipse.core.runtime.Status;
 public class QuickJUnitException extends CoreException {
     private static final long serialVersionUID = 1L;
 
-    public QuickJUnitException(Throwable cause) {
+    public QuickJUnitException(final Throwable cause) {
         this(cause.getMessage(), cause);
     }
 
-    public QuickJUnitException(IStatus status) {
+    public QuickJUnitException(final IStatus status) {
         super(status);
     }
 
-    public QuickJUnitException(String message) {
+    public QuickJUnitException(final String message) {
         this(new Status(IStatus.ERROR, QuickJUnitPlugin.getDefault().getID(), 0, message, null));
     }
 
-    public QuickJUnitException(String message, Throwable cause) {
+    public QuickJUnitException(final String message, final Throwable cause) {
         this(new Status(IStatus.ERROR, QuickJUnitPlugin.getDefault().getID(), 0, message, cause));
     }
 }

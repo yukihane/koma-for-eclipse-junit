@@ -1,9 +1,9 @@
 package junit.extensions.eclipse.quick.notifications.internal;
 
 import org.eclipse.jdt.junit.model.ITestElement;
+import org.eclipse.jdt.junit.model.ITestElement.Result;
 import org.eclipse.jdt.junit.model.ITestElementContainer;
 import org.eclipse.jdt.junit.model.ITestRunSession;
-import org.eclipse.jdt.junit.model.ITestElement.Result;
 
 public class TestCounter {
 
@@ -16,7 +16,7 @@ public class TestCounter {
     public TestCounter() {
     }
 
-    public void count(ITestRunSession session) {
+    public void count(final ITestRunSession session) {
         reset();
         count((ITestElementContainer) session);
     }
@@ -29,18 +29,18 @@ public class TestCounter {
         errorTests = 0;
     }
 
-    private void count(ITestElementContainer container) {
-        ITestElement[] children = container.getChildren();
+    private void count(final ITestElementContainer container) {
+        final ITestElement[] children = container.getChildren();
         if (children == null)
             return;
-        for (ITestElement element : children) {
+        for (final ITestElement element : children) {
             if (element instanceof ITestElementContainer) {
-                ITestElementContainer cont = (ITestElementContainer) element;
+                final ITestElementContainer cont = (ITestElementContainer) element;
                 count(cont);
                 continue;
             }
             totalTests++;
-            Result result = element.getTestResult(false);
+            final Result result = element.getTestResult(false);
             if (result == null)
                 continue;
             if (result.equals(Result.IGNORED))

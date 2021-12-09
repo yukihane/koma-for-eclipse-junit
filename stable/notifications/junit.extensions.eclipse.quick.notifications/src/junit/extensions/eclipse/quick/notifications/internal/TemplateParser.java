@@ -1,8 +1,12 @@
 package junit.extensions.eclipse.quick.notifications.internal;
 
-import org.eclipse.jdt.junit.model.ITestRunSession;
+import static junit.extensions.eclipse.quick.notifications.internal.TemplateKey.ERROR_COUNT;
+import static junit.extensions.eclipse.quick.notifications.internal.TemplateKey.FAIL_COUNT;
+import static junit.extensions.eclipse.quick.notifications.internal.TemplateKey.OK_COUNT;
+import static junit.extensions.eclipse.quick.notifications.internal.TemplateKey.RESULT_COUNT;
+import static junit.extensions.eclipse.quick.notifications.internal.TemplateKey.TOTAL_COUNT;
 
-import static junit.extensions.eclipse.quick.notifications.internal.TemplateKey.*;
+import org.eclipse.jdt.junit.model.ITestRunSession;
 
 class TemplateParser {
 
@@ -12,14 +16,14 @@ class TemplateParser {
     public TemplateParser() {
     }
 
-    public String parseTemplate(ITestRunSession session) {
+    public String parseTemplate(final ITestRunSession session) {
         String result = null;
         result = replaceResult(session, template);
         result = replaceCount(session, result);
         return result;
     }
 
-    private String replaceCount(ITestRunSession session, String result) {
+    private String replaceCount(final ITestRunSession session, String result) {
         counter.count(session);
         result = result.replaceAll(key(TOTAL_COUNT), String.valueOf(counter.getTotalTests()));
         result = result.replaceAll(key(OK_COUNT), String.valueOf(counter.getOKTests()));
@@ -29,20 +33,20 @@ class TemplateParser {
         return result;
     }
 
-    private String replaceResult(ITestRunSession session, String target) {
-        String result = target.replaceAll(key(RESULT_COUNT), session.getTestResult(true).toString());
+    private String replaceResult(final ITestRunSession session, final String target) {
+        final String result = target.replaceAll(key(RESULT_COUNT), session.getTestResult(true).toString());
         return result;
     }
 
-    private String key(TemplateKey key) {
+    private String key(final TemplateKey key) {
         return key.regexKey();
     }
 
-    public void setTemplate(String template) {
+    public void setTemplate(final String template) {
         this.template = template;
     }
 
-    void setCounter(TestCounter counter) {
+    void setCounter(final TestCounter counter) {
         this.counter = counter;
     }
 

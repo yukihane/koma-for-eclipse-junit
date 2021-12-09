@@ -27,7 +27,7 @@ public class ITypeMockBuilderTest {
     @Test
     public void should_build_mock_object() throws Exception {
 
-        IType build = builder.build();
+        final IType build = builder.build();
         assertThat(build, is(notNullValue()));
         assertThat(build, is(instanceOf(IType.class)));
 
@@ -36,7 +36,7 @@ public class ITypeMockBuilderTest {
     @Test
     public void should_return_public_accessor_object() throws Exception {
 
-        IType result = builder.setPublic().build();
+        final IType result = builder.setPublic().build();
         assertThat(result.getFlags() & Flags.AccPublic, is(Flags.AccPublic));
 
     }
@@ -44,7 +44,7 @@ public class ITypeMockBuilderTest {
     @Test
     public void super_hierarchy_should_return_null_at_initialized() throws Exception {
 
-        IType result = builder.build();
+        final IType result = builder.build();
 
         assertThat(result.newSupertypeHierarchy(new NullProgressMonitor()), is(notNullValue()));
 
@@ -53,9 +53,9 @@ public class ITypeMockBuilderTest {
     @Test
     public void get_methods_should_return_no_methods_at_initialized() throws Exception {
 
-        IType result = builder.build();
+        final IType result = builder.build();
 
-        IMethod[] methods = result.getMethods();
+        final IMethod[] methods = result.getMethods();
         assertThat(methods, is(instanceOf(IMethod[].class)));
         assertThat(methods.length, is(0));
 
@@ -64,7 +64,7 @@ public class ITypeMockBuilderTest {
     @Test
     public void normal_should_be_initialized() throws Exception {
 
-        IType result = builder.normal_class().build();
+        final IType result = builder.normal_class().build();
 
         assertThat(result.isClass(), is(true));
         assertThat(Flags.isPublic(result.getFlags()), is(true));
@@ -77,10 +77,10 @@ public class ITypeMockBuilderTest {
     @Test
     public void add_method_should_be_enabled() throws Exception {
 
-        IMethod method = new IMethodMockBuilder().build();
-        IType result = builder.normal_class().addMethod(method).build();
+        final IMethod method = new IMethodMockBuilder().build();
+        final IType result = builder.normal_class().addMethod(method).build();
 
-        IMethod[] methods = result.getMethods();
+        final IMethod[] methods = result.getMethods();
         assertThat(methods, is(instanceOf(IMethod[].class)));
         assertThat(methods.length, is(1));
 
@@ -89,8 +89,8 @@ public class ITypeMockBuilderTest {
     @Test
     public void add_method_should_set_declared_type() throws Exception {
 
-        IMethod method = new IMethodMockBuilder().build();
-        IType result = builder.normal_class().addMethod(method).build();
+        final IMethod method = new IMethodMockBuilder().build();
+        final IType result = builder.normal_class().addMethod(method).build();
 
         assertThat(method.getDeclaringType(), is(result));
 
@@ -99,11 +99,11 @@ public class ITypeMockBuilderTest {
     @Test
     public void add_method_should_enable_to_add_2_methods() throws Exception {
 
-        IMethod method1 = new IMethodMockBuilder().build();
-        IMethod method2 = new IMethodMockBuilder().build();
-        IType result = builder.normal_class().addMethod(method1).addMethod(method2).build();
+        final IMethod method1 = new IMethodMockBuilder().build();
+        final IMethod method2 = new IMethodMockBuilder().build();
+        final IType result = builder.normal_class().addMethod(method1).addMethod(method2).build();
 
-        IMethod[] methods = result.getMethods();
+        final IMethod[] methods = result.getMethods();
         assertThat(methods, is(instanceOf(IMethod[].class)));
         assertThat(methods.length, is(2));
 
@@ -112,10 +112,10 @@ public class ITypeMockBuilderTest {
     @Test
     public void junit3_class_should_extends_junit_framework_Test() throws Exception {
 
-        IType result = builder.junit3_class().build();
-        ITypeHierarchy hierarchy = result.newSupertypeHierarchy(new NullProgressMonitor());
-        IType[] interfaces = hierarchy.getAllInterfaces();
-        for (IType type : interfaces) {
+        final IType result = builder.junit3_class().build();
+        final ITypeHierarchy hierarchy = result.newSupertypeHierarchy(new NullProgressMonitor());
+        final IType[] interfaces = hierarchy.getAllInterfaces();
+        for (final IType type : interfaces) {
             if (type.getFullyQualifiedName().equals(JavaTypes.TEST_INTERFACE_NAME)) {
                 return;
             }
@@ -126,7 +126,7 @@ public class ITypeMockBuilderTest {
     @Test
     public void junit3_class_should_be_public() throws Exception {
 
-        IType result = builder.junit3_class().build();
+        final IType result = builder.junit3_class().build();
         assertThat(Flags.isPublic(result.getFlags()), is(true));
 
     }
@@ -134,7 +134,7 @@ public class ITypeMockBuilderTest {
     @Test
     public void set_runwith_should_set_RunWith_annotation() throws Exception {
 
-        IType result = builder.setRunWith("Suite.class").build();
+        final IType result = builder.setRunWith("Suite.class").build();
         assertThat(result.getSource().indexOf("@RunWith(Suite.class)"), is(not(-1)));
 
     }
@@ -142,7 +142,7 @@ public class ITypeMockBuilderTest {
     @Test
     public void set_suite_classes_should_set_SuiteClasses_annotation() throws Exception {
 
-        IType result = builder.setSuiteClasses().build();
+        final IType result = builder.setSuiteClasses().build();
         assertThat(result.getSource().indexOf("@SuiteClasses"), is(not(-1)));
 
     }
@@ -150,7 +150,7 @@ public class ITypeMockBuilderTest {
     @Test
     public void junit4_suite_classes_should_initialized() throws Exception {
 
-        IType result = builder.junit4_suite().build();
+        final IType result = builder.junit4_suite().build();
         assertThat(Flags.isPublic(result.getFlags()), is(true));
         assertThat(result.getSource().indexOf("@SuiteClasses"), is(not(-1)));
         assertThat(result.getSource().indexOf("@RunWith(Suite.class)"), is(not(-1)));

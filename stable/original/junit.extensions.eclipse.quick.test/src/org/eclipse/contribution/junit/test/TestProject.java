@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2003 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
+ * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/cpl-v10.html
- * 
+ *
  * Contributors:
  *     Erich Gamma (erich_gamma@ch.ibm.com) and
  * 	   Kent Beck (kent@threeriversinstitute.org)
@@ -21,7 +21,6 @@ package org.eclipse.contribution.junit.test;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -50,20 +49,20 @@ import org.eclipse.jdt.core.search.TypeNameRequestor;
 import org.eclipse.jdt.launching.JavaRuntime;
 
 public class TestProject {
-    private IProject project;
+    private final IProject project;
 
-    private IJavaProject javaProject;
+    private final IJavaProject javaProject;
 
     private IPackageFragmentRoot sourceFolder;
 
     public TestProject() throws CoreException {
-        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         project = root.getProject("TestProject");
         project.create(null);
         project.open(null);
         javaProject = JavaCore.create(project);
 
-        IFolder binFolder = createBinFolder();
+        final IFolder binFolder = createBinFolder();
 
         setJavaNature();
         javaProject.setRawClasspath(new IClasspathEntry[0], null);
@@ -80,31 +79,31 @@ public class TestProject {
         return javaProject;
     }
 
-    public void addJar(String plugin, String jar) throws MalformedURLException,
+    public void addJar(final String plugin, final String jar) throws MalformedURLException,
         IOException, JavaModelException {
-        Path result = findFileInPlugin(plugin, jar);
-        IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
-        IClasspathEntry[] newEntries = new IClasspathEntry[oldEntries.length + 1];
+        final Path result = findFileInPlugin(plugin, jar);
+        final IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
+        final IClasspathEntry[] newEntries = new IClasspathEntry[oldEntries.length + 1];
         System.arraycopy(oldEntries, 0, newEntries, 0, oldEntries.length);
         newEntries[oldEntries.length] = JavaCore.newLibraryEntry(result, null,
             null);
         javaProject.setRawClasspath(newEntries, null);
     }
 
-    public IPackageFragment createPackage(String name) throws CoreException {
+    public IPackageFragment createPackage(final String name) throws CoreException {
         if (sourceFolder == null)
             sourceFolder = createSourceFolder();
         return sourceFolder.createPackageFragment(name, false, null);
     }
 
-    public IType createType(IPackageFragment pack, String cuName, String source)
+    public IType createType(final IPackageFragment pack, final String cuName, final String source)
         throws JavaModelException {
-        StringBuilder buf = new StringBuilder();
+        final StringBuilder buf = new StringBuilder();
         buf.append("package " + pack.getElementName() + ";\n");
         buf.append("\n");
         buf.append(source);
-        IProgressMonitor monitor = new NullProgressMonitor();
-        ICompilationUnit cu = pack.createCompilationUnit(cuName,
+        final IProgressMonitor monitor = new NullProgressMonitor();
+        final ICompilationUnit cu = pack.createCompilationUnit(cuName,
             buf.toString(), false, monitor);
         return cu.getTypes()[0];
     }
@@ -115,30 +114,30 @@ public class TestProject {
     }
 
     private IFolder createBinFolder() throws CoreException {
-        IFolder binFolder = project.getFolder("bin");
+        final IFolder binFolder = project.getFolder("bin");
         binFolder.create(false, true, null);
         return binFolder;
     }
 
     private void setJavaNature() throws CoreException {
-        IProjectDescription description = project.getDescription();
+        final IProjectDescription description = project.getDescription();
         description.setNatureIds(new String[] { JavaCore.NATURE_ID });
         project.setDescription(description, null);
     }
 
-    private void createOutputFolder(IFolder binFolder)
+    private void createOutputFolder(final IFolder binFolder)
         throws JavaModelException {
-        IPath outputLocation = binFolder.getFullPath();
+        final IPath outputLocation = binFolder.getFullPath();
         javaProject.setOutputLocation(outputLocation, null);
     }
 
     private IPackageFragmentRoot createSourceFolder() throws CoreException {
-        IFolder folder = project.getFolder("src");
+        final IFolder folder = project.getFolder("src");
         folder.create(false, true, null);
-        IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(folder);
+        final IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(folder);
 
-        IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
-        IClasspathEntry[] newEntries = new IClasspathEntry[oldEntries.length + 1];
+        final IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
+        final IClasspathEntry[] newEntries = new IClasspathEntry[oldEntries.length + 1];
         System.arraycopy(oldEntries, 0, newEntries, 0, oldEntries.length);
         newEntries[oldEntries.length] = JavaCore.newSourceEntry(root.getPath());
         javaProject.setRawClasspath(newEntries, null);
@@ -146,25 +145,25 @@ public class TestProject {
     }
 
     private void addSystemLibraries() throws JavaModelException {
-        IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
-        IClasspathEntry[] newEntries = new IClasspathEntry[oldEntries.length + 1];
+        final IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
+        final IClasspathEntry[] newEntries = new IClasspathEntry[oldEntries.length + 1];
         System.arraycopy(oldEntries, 0, newEntries, 0, oldEntries.length);
         newEntries[oldEntries.length] = JavaRuntime
             .getDefaultJREContainerEntry();
         javaProject.setRawClasspath(newEntries, null);
     }
 
-    private Path findFileInPlugin(String plugin, String file)
+    private Path findFileInPlugin(final String plugin, final String file)
         throws MalformedURLException, IOException {
-        URL pluginURL = Platform.getBundle(plugin).getEntry("/");
-        URL jarURL = new URL(pluginURL, file);
-        URL localJarURL = FileLocator.toFileURL(jarURL);
+        final URL pluginURL = Platform.getBundle(plugin).getEntry("/");
+        final URL jarURL = new URL(pluginURL, file);
+        final URL localJarURL = FileLocator.toFileURL(jarURL);
         return new Path(localJarURL.getPath());
 
     }
 
     private void waitForIndexer() throws JavaModelException {
-        TypeNameRequestor nameRequestor = new TypeNameRequestor() {
+        final TypeNameRequestor nameRequestor = new TypeNameRequestor() {
         };
         new SearchEngine().searchAllTypeNames(
             null,

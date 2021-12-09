@@ -27,7 +27,8 @@ public class Activator extends AbstractUIPlugin {
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
      */
-    public void start(BundleContext context) throws Exception {
+    @Override
+    public void start(final BundleContext context) throws Exception {
         super.start(context);
         JFaceResources.getColorRegistry().put("TEST_FAILED", new RGB(255, 0, 0));
         plugin = this;
@@ -37,14 +38,15 @@ public class Activator extends AbstractUIPlugin {
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
      */
-    public void stop(BundleContext context) throws Exception {
+    @Override
+    public void stop(final BundleContext context) throws Exception {
         plugin = null;
         JFaceResources.getColorRegistry().get("TEST_FAILED").dispose();
         super.stop(context);
     }
 
     @Override
-    protected void initializeImageRegistry(ImageRegistry reg) {
+    protected void initializeImageRegistry(final ImageRegistry reg) {
         reg.put(ImageDesc.ERROR.name(), ImageDesc.ERROR.getIamgeDescriptor());
         reg.put(ImageDesc.FAILURE.name(), ImageDesc.FAILURE.getIamgeDescriptor());
         reg.put(ImageDesc.OK.name(), ImageDesc.OK.getIamgeDescriptor());

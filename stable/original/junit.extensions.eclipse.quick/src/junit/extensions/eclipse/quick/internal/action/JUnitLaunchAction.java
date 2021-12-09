@@ -3,7 +3,6 @@ package junit.extensions.eclipse.quick.internal.action;
 import junit.extensions.eclipse.quick.JavaElements;
 import junit.extensions.eclipse.quick.internal.Messages;
 import junit.extensions.eclipse.quick.internal.QuickJUnitPlugin;
-
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
@@ -13,24 +12,24 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 public class JUnitLaunchAction extends QuickJUnitAction {
-    private String mode;
-    private ILaunchShortcut launchShortcut;
+    private final String mode;
+    private final ILaunchShortcut launchShortcut;
 
-    public JUnitLaunchAction(ILaunchShortcut launchShortcut, String mode) {
+    public JUnitLaunchAction(final ILaunchShortcut launchShortcut, final String mode) {
         this.launchShortcut = launchShortcut;
         this.mode = mode;
     }
 
-    private IJavaElement getTargetElement(IAction action) throws JavaModelException {
-        IJavaElement element = getSelectedElement();
+    private IJavaElement getTargetElement(final IAction action) throws JavaModelException {
+        final IJavaElement element = getSelectedElement();
         if (element == null || element.getElementType() < IJavaElement.COMPILATION_UNIT)
             return element;
 
-        IJavaElement testableElement = JavaElements.getTestMethodOrClass(element);
+        final IJavaElement testableElement = JavaElements.getTestMethodOrClass(element);
         if (testableElement != null)
             return testableElement;
 
-        IType type = JavaElements.getPrimaryTypeOf(element);
+        final IType type = JavaElements.getPrimaryTypeOf(element);
         if (type == null)
             return element;
 
@@ -39,18 +38,19 @@ public class JUnitLaunchAction extends QuickJUnitAction {
     }
 
     private IJavaElement getSelectedElement() throws JavaModelException {
-        IJavaElement element = getElementOfJavaEditor();
+        final IJavaElement element = getElementOfJavaEditor();
         return element == null ? javaElement : element;
     }
 
-    public void run(IAction action) {
+    @Override
+    public void run(final IAction action) {
         try {
-            IJavaElement element = getTargetElement(action);
+            final IJavaElement element = getTargetElement(action);
             if (element == null)
                 return;
-            ISelection sel = new StructuredSelection(new Object[] { element });
+            final ISelection sel = new StructuredSelection(new Object[] { element });
             launchShortcut.launch(sel, mode);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             QuickJUnitPlugin.getDefault().handleSystemError(e, this);
         }
     }

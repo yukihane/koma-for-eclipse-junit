@@ -2,7 +2,6 @@ package junit.extensions.eclipse.quick.notifications.internal;
 
 import java.util.List;
 import java.util.WeakHashMap;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -21,24 +20,25 @@ public class JUnitPopupNotificationSink extends NotificationSink {
 
     private static final boolean runSystem = true;
 
-    private final WeakHashMap<Object, Object> cancelledTokens = new WeakHashMap<Object, Object>();
+    private final WeakHashMap<Object, Object> cancelledTokens = new WeakHashMap<>();
 
     private JUnitNotification currentlyNotifying;
 
     private final Job openJob = new Job("JUnit Result popup notifier") {
         @Override
-        protected IStatus run(IProgressMonitor monitor) {
+        protected IStatus run(final IProgressMonitor monitor) {
             try {
                 if (Platform.isRunning() && PlatformUI.getWorkbench() != null
                     && PlatformUI.getWorkbench().getDisplay() != null
                     && !PlatformUI.getWorkbench().getDisplay().isDisposed()) {
                     PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 
+                        @Override
                         public void run() {
                             collectNotifications();
 
                             if (popup != null && popup.getReturnCode() == Window.CANCEL) {
-                                AbstractNotification notification = popup.getNotification();
+                                final AbstractNotification notification = popup.getNotification();
                                 if (notification.getToken() != null) {
                                     cancelledTokens.put(notification.getToken(), null);
                                 }
@@ -82,11 +82,11 @@ public class JUnitPopupNotificationSink extends NotificationSink {
     }
 
     @Override
-    public void notify(NotificationSinkEvent event) {
-        List<AbstractNotification> notifications = event.getNotifications();
+    public void notify(final NotificationSinkEvent event) {
+        final List<AbstractNotification> notifications = event.getNotifications();
         if (notifications.isEmpty())
             return;
-        AbstractNotification notification = notifications.get(0);
+        final AbstractNotification notification = notifications.get(0);
         if ((notification instanceof JUnitNotification) == false) {
             return;
         }
@@ -95,7 +95,7 @@ public class JUnitPopupNotificationSink extends NotificationSink {
         if (!openJob.cancel()) {
             try {
                 openJob.join();
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 // ignore
             }
         }
@@ -108,8 +108,8 @@ public class JUnitPopupNotificationSink extends NotificationSink {
             popup.close();
         }
 
-        Display display = PlatformUI.getWorkbench().getDisplay();
-        Shell shell = new Shell(display);
+        final Display display = PlatformUI.getWorkbench().getDisplay();
+        final Shell shell = new Shell(display);
 
         popup = new JUnitNotificationPopup(shell, currentlyNotifying);
         cleanNotified();

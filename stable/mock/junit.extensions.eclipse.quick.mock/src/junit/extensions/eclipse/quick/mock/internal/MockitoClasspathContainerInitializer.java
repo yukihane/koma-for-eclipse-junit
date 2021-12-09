@@ -16,25 +16,29 @@ public class MockitoClasspathContainerInitializer extends
     }
 
     @Override
-    public void initialize(IPath containerPath, IJavaProject project)
+    public void initialize(final IPath containerPath, final IJavaProject project)
         throws CoreException {
-        IClasspathContainer container = new IClasspathContainer() {
+        final IClasspathContainer container = new IClasspathContainer() {
 
+            @Override
             public IPath getPath() {
                 return new Path(MockitoEntry.CONTAINER_PATH);
             }
 
+            @Override
             public int getKind() {
                 return K_APPLICATION;
             }
 
+            @Override
             public String getDescription() {
                 return "Mockito";
             }
 
+            @Override
             public IClasspathEntry[] getClasspathEntries() {
-                MockitoEntry entry = new MockitoEntry();
-                IClasspathEntry[] result = new IClasspathEntry[] {
+                final MockitoEntry entry = new MockitoEntry();
+                final IClasspathEntry[] result = new IClasspathEntry[] {
                     JavaCore.newLibraryEntry(entry.getPath(), null, null)
                 };
                 return result;

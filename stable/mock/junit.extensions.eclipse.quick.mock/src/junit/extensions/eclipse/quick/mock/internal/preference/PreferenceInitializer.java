@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -15,7 +14,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * Initializes the default preferences if none exist.
- * 
+ *
  */
 public class PreferenceInitializer implements IStartup {
 
@@ -34,21 +33,21 @@ public class PreferenceInitializer implements IStartup {
 
     /**
      * Create a preference initializer with the two preference stores.
-     * 
+     *
      * @param jdtPreferenceStore used by JDT.
      */
-    public PreferenceInitializer(IPreferenceStore jdtPreferenceStore) {
+    public PreferenceInitializer(final IPreferenceStore jdtPreferenceStore) {
         this.jdtPreferenceStore = jdtPreferenceStore;
     }
 
     void initializeFavorites() {
-        Set<String> imports = new LinkedHashSet<String>(getJDTImports());
+        final Set<String> imports = new LinkedHashSet<>(getJDTImports());
         imports.addAll(getDefaultFavorites());
-        String join = join(imports, SEMI_COLON);
+        final String join = join(imports, SEMI_COLON);
         jdtPreferenceStore.setValue(PreferenceConstants.CODEASSIST_FAVORITE_STATIC_MEMBERS, join);
         try {
             ((ScopedPreferenceStore) jdtPreferenceStore).save();
-        } catch (IOException e) {
+        } catch (final IOException e) {
         }
     }
 
@@ -56,35 +55,35 @@ public class PreferenceInitializer implements IStartup {
      * @return the JDT favorite imports.
      */
     public Set<String> getJDTImports() {
-        String preference = jdtPreferenceStore.getString(PreferenceConstants.CODEASSIST_FAVORITE_STATIC_MEMBERS);
+        final String preference = jdtPreferenceStore.getString(PreferenceConstants.CODEASSIST_FAVORITE_STATIC_MEMBERS);
         if (EMPTY.equals(preference.trim())) {
-            return new HashSet<String>();
+            return new HashSet<>();
         }
-        String[] imports = preference.split(SEMI_COLON);
-        return new LinkedHashSet<String>(Arrays.asList(imports));
+        final String[] imports = preference.split(SEMI_COLON);
+        return new LinkedHashSet<>(Arrays.asList(imports));
     }
 
     private LinkedHashSet<String> getDefaultFavorites() {
-        LinkedHashSet<String> orderedSet = new LinkedHashSet<String>();
+        final LinkedHashSet<String> orderedSet = new LinkedHashSet<>();
         orderedSet.add(importStatement("org.mockito.Matchers"));
         orderedSet.add(importStatement("org.mockito.Mockito"));
         return orderedSet;
     }
 
-    public void propertyChange(PropertyChangeEvent event) {
+    public void propertyChange(final PropertyChangeEvent event) {
         initializeFavorites();
     }
 
-    private String importStatement(String clazz) {
+    private String importStatement(final String clazz) {
         return clazz + ".*"; //$NON-NLS-1$;
     }
 
-    private String join(Collection<?> toJoin, String delimiter) {
+    private String join(final Collection<?> toJoin, final String delimiter) {
         if ((toJoin == null) || (toJoin.size() == 0))
             return "";
-        StringBuffer result = new StringBuffer();
+        final StringBuffer result = new StringBuffer();
 
-        for (Object object : toJoin) {
+        for (final Object object : toJoin) {
             result.append(object);
             result.append(delimiter);
         }
@@ -94,6 +93,7 @@ public class PreferenceInitializer implements IStartup {
         return result.toString();
     }
 
+    @Override
     public void earlyStartup() {
         new PreferenceInitializer().initializeFavorites();
     }

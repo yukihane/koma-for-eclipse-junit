@@ -1,7 +1,6 @@
 package junit.extensions.eclipse.quick.mock.internal.wizard;
 
 import junit.extensions.eclipse.quick.mock.internal.MockitoEntry;
-
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -18,7 +17,7 @@ import org.eclipse.swt.widgets.Label;
 
 public class MockitoPage extends WizardPage implements IClasspathContainerPage, IClasspathContainerPageExtension {
 
-    private MockitoEntry entry;
+    private final MockitoEntry entry;
     private IJavaProject project;
 
     public MockitoPage() {
@@ -28,39 +27,44 @@ public class MockitoPage extends WizardPage implements IClasspathContainerPage, 
         entry = new MockitoEntry();
     }
 
+    @Override
     public boolean finish() {
         try {
-            IJavaProject[] javaProjects = new IJavaProject[] { project };
-            IClasspathContainer[] containers = { null };
+            final IJavaProject[] javaProjects = new IJavaProject[] { project };
+            final IClasspathContainer[] containers = { null };
             JavaCore.setClasspathContainer(entry.getContainerPath(), javaProjects, containers, null);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             return false;
         }
 
         return true;
     }
 
+    @Override
     public IClasspathEntry getSelection() {
         return entry.getContainer();
     }
 
-    public void setSelection(IClasspathEntry containerEntry) {
+    @Override
+    public void setSelection(final IClasspathEntry containerEntry) {
     }
 
-    public void createControl(Composite parent) {
-        Composite composite = new Composite(parent, SWT.NONE);
+    @Override
+    public void createControl(final Composite parent) {
+        final Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         composite.setLayout(new GridLayout(1, false));
 
-        Label label = new Label(composite, SWT.NONE);
+        final Label label = new Label(composite, SWT.NONE);
         label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
             false));
         label.setText(Messages.MockitoPage_AddedLabel);
         setControl(composite);
     }
 
-    public void initialize(IJavaProject project,
-        IClasspathEntry[] currentEntries) {
+    @Override
+    public void initialize(final IJavaProject project,
+        final IClasspathEntry[] currentEntries) {
         this.project = project;
     }
 

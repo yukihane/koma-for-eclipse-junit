@@ -8,9 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TestingPair {
-    private List namingRules = new ArrayList();
+    private final List namingRules = new ArrayList();
 
-    public void addNamingRule(String rule) {
+    public void addNamingRule(final String rule) {
         namingRules.add(rule);
     }
 
@@ -19,7 +19,7 @@ public class TestingPair {
     }
 
     public String[] getPairClassNames(String className) {
-        Set result = new LinkedHashSet();
+        final Set result = new LinkedHashSet();
         className = chopInnerClassName(className);
         addTestedClassNames(className, result);
         if (result.isEmpty()) {
@@ -28,20 +28,20 @@ public class TestingPair {
         return (String[]) result.toArray(new String[result.size()]);
     }
 
-    private void addTestedClassNames(String className, Set result) {
+    private void addTestedClassNames(final String className, final Set result) {
         for (int i = 0; i < namingRules.size(); ++i) {
-            String testedClassName = getTestedClassName(className, (String) namingRules.get(i));
+            final String testedClassName = getTestedClassName(className, (String) namingRules.get(i));
             if (testedClassName != null)
                 result.add(testedClassName);
         }
     }
 
-    private String escapeAllChars(String str) {
+    private String escapeAllChars(final String str) {
         // 正規表現の特殊文字
         final String escapeChars = "\\${}?+.[]-()><!|^:=*&,";
-        StringBuffer buf = new StringBuffer();
+        final StringBuffer buf = new StringBuffer();
         for (int i = 0; i < str.length(); ++i) {
-            char c = str.charAt(i);
+            final char c = str.charAt(i);
             if (escapeChars.indexOf(c) != -1)
                 buf.append('\\');
             buf.append(c);
@@ -49,8 +49,8 @@ public class TestingPair {
         return buf.toString();
     }
 
-    private String getTestedClassName(String className, String namingRule) {
-        int index = className.lastIndexOf('.');
+    private String getTestedClassName(final String className, String namingRule) {
+        final int index = className.lastIndexOf('.');
         // 正規表現で問題のある文字をすべてエスケープしておく
         namingRule = escapeAllChars(namingRule);
         if (index == -1) {
@@ -60,15 +60,15 @@ public class TestingPair {
             // などとしなければならない．
             namingRule = namingRule.replaceAll("\\\\\\$\\\\\\{package\\\\\\}\\\\\\.", "");
             namingRule = namingRule.replaceAll("\\\\\\$\\\\\\{type\\\\\\}", "(\\\\w+)");
-            Pattern p = Pattern.compile(namingRule);
-            Matcher m = p.matcher(className);
+            final Pattern p = Pattern.compile(namingRule);
+            final Matcher m = p.matcher(className);
             if (m.matches()) {
                 return m.group(1);
             }
         } else {
             namingRule = namingRule.replaceAll("\\\\\\$\\\\\\{package\\\\\\}\\\\\\.", "(?:([\\\\w\\\\.]+)\\\\.)?");
-            Pattern p = Pattern.compile(namingRule.replaceAll("\\\\\\$\\\\\\{type\\\\\\}", "(\\\\w+)"));
-            Matcher m = p.matcher(className);
+            final Pattern p = Pattern.compile(namingRule.replaceAll("\\\\\\$\\\\\\{type\\\\\\}", "(\\\\w+)"));
+            final Matcher m = p.matcher(className);
             if (m.matches()) {
                 if (m.group(1) == null)
                     return m.group(2);
@@ -79,9 +79,9 @@ public class TestingPair {
         return null;
     }
 
-    private void addTestClassNames(String className, Set result) {
+    private void addTestClassNames(final String className, final Set result) {
         String packageName, typeName;
-        int index = className.lastIndexOf('.');
+        final int index = className.lastIndexOf('.');
         if (index != -1) {
             typeName = className.substring(index + 1);
             packageName = className.substring(0, index);
@@ -94,7 +94,7 @@ public class TestingPair {
         }
     }
 
-    private String getTestClassName(String packageName, String typeName, String namingRule) {
+    private String getTestClassName(final String packageName, final String typeName, final String namingRule) {
         String result = new String(namingRule);
         if (packageName != null) {
             result = result.replaceAll("\\$\\{package\\}", packageName);
@@ -104,8 +104,8 @@ public class TestingPair {
         return result.replaceAll("\\$\\{type\\}", typeName);
     }
 
-    private String chopInnerClassName(String className) {
-        int index = className.indexOf('$');
+    private String chopInnerClassName(final String className) {
+        final int index = className.indexOf('$');
         if (index == -1)
             return className;
         return className.substring(0, index);

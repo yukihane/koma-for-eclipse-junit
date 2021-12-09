@@ -2,7 +2,6 @@ package junit.extensions.eclipse.quick.internal.preference;
 
 import junit.extensions.eclipse.quick.NamingRules;
 import junit.extensions.eclipse.quick.internal.QuickJUnitPlugin;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -25,13 +24,15 @@ public class QuickJUnitPreferencePage extends PreferencePage implements IWorkben
         setPreferenceStore(QuickJUnitPlugin.getDefault().getPreferenceStore());
     }
 
-    public void init(IWorkbench workbench) {
-        IPreferenceStore store = getPreferenceStore();
+    @Override
+    public void init(final IWorkbench workbench) {
+        final IPreferenceStore store = getPreferenceStore();
         namingRules = new NamingRules(store);
         namingRulesPreference = new NamingRulesPreference(this);
     }
 
-    protected Control createContents(Composite parent) {
+    @Override
+    protected Control createContents(final Composite parent) {
         // TODO implements source folder feature.
         //	    Composite sourceFolderComposite = new Composite(parent, SWT.NULL);
         //	    GridLayout sfLayout = new GridLayout(2, false);
@@ -47,12 +48,12 @@ public class QuickJUnitPreferencePage extends PreferencePage implements IWorkben
         //	    text.setLayoutData(textGData);
         //	    text.setText("${project}/src");
 
-        Composite composite = new Composite(parent, SWT.NULL);
-        GridLayout layout = new GridLayout();
+        final Composite composite = new Composite(parent, SWT.NULL);
+        final GridLayout layout = new GridLayout();
         layout.numColumns = 1;
         layout.marginWidth = 0;
         composite.setLayout(layout);
-        GridData data = new GridData(GridData.FILL_BOTH);
+        final GridData data = new GridData(GridData.FILL_BOTH);
         composite.setLayoutData(data);
 
         namingRulesPreference.create(namingRules.get(), composite);
@@ -60,18 +61,20 @@ public class QuickJUnitPreferencePage extends PreferencePage implements IWorkben
         return composite;
     }
 
-    GridData getButtonGridData(Button button) {
-        GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
-        int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
+    GridData getButtonGridData(final Button button) {
+        final GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+        final int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
         gd.widthHint = Math.max(widthHint, button.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x);
         return gd;
     }
 
+    @Override
     protected void performDefaults() {
         super.performDefaults();
         namingRulesPreference.setValue(namingRules.getDefault());
     }
 
+    @Override
     public boolean performOk() {
         namingRules.set(namingRulesPreference.getValue());
         return true;

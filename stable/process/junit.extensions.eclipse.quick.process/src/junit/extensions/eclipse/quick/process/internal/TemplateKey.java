@@ -13,7 +13,7 @@ public enum TemplateKey {
     private String key;
     private String description;
 
-    TemplateKey(String key, String description) {
+    TemplateKey(final String key, final String description) {
         this.key = key;
         this.description = description;
     }

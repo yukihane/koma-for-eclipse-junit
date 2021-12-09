@@ -10,13 +10,13 @@ import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
 
 public class JavaElements {
-    public static boolean isTestMethod(IJavaElement element) throws JavaModelException {
+    public static boolean isTestMethod(final IJavaElement element) throws JavaModelException {
         if (!(element instanceof IMethod))
             return false;
-        IMethod method = (IMethod) element;
+        final IMethod method = (IMethod) element;
         if (!method.getReturnType().equals("V"))
             return false;
-        int flags = method.getFlags();
+        final int flags = method.getFlags();
         if (!Flags.isPublic(flags) || Flags.isStatic(flags))
             return false;
         if (method.getElementName().startsWith("test"))
@@ -25,7 +25,7 @@ public class JavaElements {
         return hasTestAnnotationOnMethod(method);
     }
 
-    public static IType getPrimaryTypeOf(IJavaElement element) {
+    public static IType getPrimaryTypeOf(final IJavaElement element) {
         if (element == null)
             return null;
         ICompilationUnit cu = null;
@@ -37,11 +37,11 @@ public class JavaElements {
         return cu != null ? cu.findPrimaryType() : null;
     }
 
-    public static boolean isTestClass(IType type) throws JavaModelException {
-        ITypeHierarchy superTypeHierarchy = type.newSupertypeHierarchy(null);
-        IType superTypes[] = superTypeHierarchy.getAllInterfaces();
+    public static boolean isTestClass(final IType type) throws JavaModelException {
+        final ITypeHierarchy superTypeHierarchy = type.newSupertypeHierarchy(null);
+        final IType superTypes[] = superTypeHierarchy.getAllInterfaces();
         for (int i = 0; i < superTypes.length; ++i) {
-            IType superType = superTypes[i];
+            final IType superType = superTypes[i];
             if (superType.getFullyQualifiedName().equals(JavaTypes.TEST_INTERFACE_NAME))
                 return true;
         }
@@ -52,7 +52,7 @@ public class JavaElements {
         throws JavaModelException {
         while (element != null) {
             if (isTestMethod(element)) {
-                IType declaringType = ((IMethod) element).getDeclaringType();
+                final IType declaringType = ((IMethod) element).getDeclaringType();
                 if (hasParameterizedAnnotation(declaringType)) {
                     return declaringType;
                 }
@@ -60,7 +60,7 @@ public class JavaElements {
             }
 
             if (isTestRunnerPassibleClass(element)) {
-                IType type = (IType) element;
+                final IType type = (IType) element;
                 if (isTestClass(type))
                     return element;
                 if (hasSuiteMethod(type))
@@ -75,35 +75,35 @@ public class JavaElements {
         return null;
     }
 
-    private static boolean hasParameterizedAnnotation(IType type) throws JavaModelException {
-        String source = type.getSource();
+    private static boolean hasParameterizedAnnotation(final IType type) throws JavaModelException {
+        final String source = type.getSource();
         if (source == null)
             return false;
         return source.indexOf("Parameterized") != -1;
     }
 
-    private static boolean hasSuiteAnnotation(IType type) throws JavaModelException {
-        String source = type.getSource();
+    private static boolean hasSuiteAnnotation(final IType type) throws JavaModelException {
+        final String source = type.getSource();
         if (source == null)
             return false;
         return source.indexOf("@SuiteClasses") != -1 && source.indexOf("Suite.class") != -1;
     }
 
-    private static boolean isTestRunnerPassibleClass(IJavaElement element) throws JavaModelException {
+    private static boolean isTestRunnerPassibleClass(final IJavaElement element) throws JavaModelException {
         if (!(element instanceof IType))
             return false;
-        IType type = (IType) element;
+        final IType type = (IType) element;
         if (!type.isClass())
             return false;
-        int flags = type.getFlags();
+        final int flags = type.getFlags();
         if (Flags.isAbstract(flags) || !Flags.isPublic(flags))
             return false;
 
         return true;
     }
 
-    private static boolean hasSuiteMethod(IType type) throws JavaModelException {
-        IMethod[] methods = type.getMethods();
+    private static boolean hasSuiteMethod(final IType type) throws JavaModelException {
+        final IMethod[] methods = type.getMethods();
         for (int i = 0; i < methods.length; i++) {
             if (isStaticSuiteMethod(methods[i]))
                 return true;
@@ -111,8 +111,8 @@ public class JavaElements {
         return false;
     }
 
-    private static boolean hasTestAnnotation(IType type) throws JavaModelException {
-        IMethod[] methods = type.getMethods();
+    private static boolean hasTestAnnotation(final IType type) throws JavaModelException {
+        final IMethod[] methods = type.getMethods();
         for (int i = 0; i < methods.length; i++) {
             if (hasTestAnnotationOnMethod(methods[i]))
                 return true;
@@ -120,11 +120,11 @@ public class JavaElements {
         return false;
     }
 
-    private static boolean hasTestAnnotationOnMethod(IMethod method) throws JavaModelException {
+    private static boolean hasTestAnnotationOnMethod(final IMethod method) throws JavaModelException {
         return method.getSource() == null ? false : method.getSource().indexOf("@Test") > -1;
     }
 
-    private static boolean isStaticSuiteMethod(IMethod method) throws JavaModelException {
+    private static boolean isStaticSuiteMethod(final IMethod method) throws JavaModelException {
         return ((method.getElementName().equals("suite")) &&
             method.getSignature().equals("()QTest;") &&
             Flags.isPublic(method.getFlags()) &&

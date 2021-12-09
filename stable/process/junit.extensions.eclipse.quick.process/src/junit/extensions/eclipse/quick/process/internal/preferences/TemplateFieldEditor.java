@@ -1,8 +1,8 @@
 package junit.extensions.eclipse.quick.process.internal.preferences;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -54,7 +54,7 @@ public class TemplateFieldEditor extends FieldEditor {
 
     /**
      * Old text value.
-     * 
+     *
      * @since 3.4 this field is protected.
      */
     protected String oldValue;
@@ -101,7 +101,7 @@ public class TemplateFieldEditor extends FieldEditor {
     /**
      * Creates a string field editor.
      * Use the method <code>setTextLimit</code> to limit the text.
-     * 
+     *
      * @param name the name of the preference this field editor works on
      * @param labelText the label text of the field editor
      * @param width the width of the text input field in characters,
@@ -112,8 +112,8 @@ public class TemplateFieldEditor extends FieldEditor {
      * @param parent the parent of the field editor's control
      * @since 2.0
      */
-    public TemplateFieldEditor(String name, String labelText, int width,
-        int strategy, Composite parent) {
+    public TemplateFieldEditor(final String name, final String labelText, final int width,
+        final int strategy, final Composite parent) {
         init(name, labelText);
         widthInChars = width;
         setValidateStrategy(strategy);
@@ -126,35 +126,36 @@ public class TemplateFieldEditor extends FieldEditor {
     /**
      * Creates a string field editor.
      * Use the method <code>setTextLimit</code> to limit the text.
-     * 
+     *
      * @param name the name of the preference this field editor works on
      * @param labelText the label text of the field editor
      * @param width the width of the text input field in characters,
      * or <code>UNLIMITED</code> for no limit
      * @param parent the parent of the field editor's control
      */
-    public TemplateFieldEditor(String name, String labelText, int width,
-        Composite parent) {
+    public TemplateFieldEditor(final String name, final String labelText, final int width,
+        final Composite parent) {
         this(name, labelText, width, VALIDATE_ON_KEY_STROKE, parent);
     }
 
     /**
      * Creates a string field editor of unlimited width.
      * Use the method <code>setTextLimit</code> to limit the text.
-     * 
+     *
      * @param name the name of the preference this field editor works on
      * @param labelText the label text of the field editor
      * @param parent the parent of the field editor's control
      */
-    public TemplateFieldEditor(String name, String labelText, Composite parent) {
+    public TemplateFieldEditor(final String name, final String labelText, final Composite parent) {
         this(name, labelText, UNLIMITED, parent);
     }
 
     /* (non-Javadoc)
      * Method declared on FieldEditor.
      */
-    protected void adjustForNumColumns(int numColumns) {
-        GridData gd = (GridData) textField.getLayoutData();
+    @Override
+    protected void adjustForNumColumns(final int numColumns) {
+        final GridData gd = (GridData) textField.getLayoutData();
         gd.horizontalSpan = numColumns - 1;
         // We only grab excess space if we have to
         // If another field editor has more columns then
@@ -178,7 +179,7 @@ public class TemplateFieldEditor extends FieldEditor {
             result = false;
         }
 
-        String txt = textField.getText();
+        final String txt = textField.getText();
 
         result = (txt.trim().length() > 0) || emptyStringAllowed;
 
@@ -217,11 +218,12 @@ public class TemplateFieldEditor extends FieldEditor {
      * but must call <code>super.doFillIntoGrid</code>.
      * </p>
      */
-    protected void doFillIntoGrid(Composite parent, int numColumns) {
+    @Override
+    protected void doFillIntoGrid(final Composite parent, final int numColumns) {
         getLabelControl(parent);
 
         textField = getTextControl(parent);
-        GridData gd = new GridData();
+        final GridData gd = new GridData();
         gd.horizontalSpan = numColumns - 1;
         //        if (widthInChars != UNLIMITED) {
         //            GC gc = new GC(textField);
@@ -235,9 +237,9 @@ public class TemplateFieldEditor extends FieldEditor {
         //            gd.horizontalAlignment = GridData.FILL;
         //            gd.grabExcessHorizontalSpace = true;
         //        }
-        GC gc = new GC(textField);
+        final GC gc = new GC(textField);
         try {
-            Point textExtent = gc.textExtent("X");//$NON-NLS-1$
+            final Point textExtent = gc.textExtent("X");//$NON-NLS-1$
             gd.heightHint = textExtent.y * 3;
             gd.horizontalAlignment = GridData.FILL;
             gd.grabExcessHorizontalSpace = true;
@@ -251,9 +253,10 @@ public class TemplateFieldEditor extends FieldEditor {
     /* (non-Javadoc)
      * Method declared on FieldEditor.
      */
+    @Override
     protected void doLoad() {
         if (textField != null) {
-            String value = getPreferenceStore().getString(getPreferenceName());
+            final String value = getPreferenceStore().getString(getPreferenceName());
             textField.setText(value);
             oldValue = value;
         }
@@ -262,9 +265,10 @@ public class TemplateFieldEditor extends FieldEditor {
     /* (non-Javadoc)
      * Method declared on FieldEditor.
      */
+    @Override
     protected void doLoadDefault() {
         if (textField != null) {
-            String value = getPreferenceStore().getDefaultString(
+            final String value = getPreferenceStore().getDefaultString(
                 getPreferenceName());
             textField.setText(value);
         }
@@ -274,6 +278,7 @@ public class TemplateFieldEditor extends FieldEditor {
     /* (non-Javadoc)
      * Method declared on FieldEditor.
      */
+    @Override
     protected void doStore() {
         getPreferenceStore().setValue(getPreferenceName(), textField.getText());
     }
@@ -291,6 +296,7 @@ public class TemplateFieldEditor extends FieldEditor {
     /* (non-Javadoc)
      * Method declared on FieldEditor.
      */
+    @Override
     public int getNumberOfControls() {
         return 2;
     }
@@ -327,7 +333,7 @@ public class TemplateFieldEditor extends FieldEditor {
      * @param parent the parent
      * @return the text control
      */
-    public Text getTextControl(Composite parent) {
+    public Text getTextControl(final Composite parent) {
         if (textField == null) {
             textField = new Text(parent, SWT.MULTI | SWT.LEAD | SWT.BORDER | SWT.WRAP);
             textField.setFont(parent.getFont());
@@ -338,7 +344,8 @@ public class TemplateFieldEditor extends FieldEditor {
                         /* (non-Javadoc)
                          * @see org.eclipse.swt.events.KeyAdapter#keyReleased(org.eclipse.swt.events.KeyEvent)
                          */
-                        public void keyReleased(KeyEvent e) {
+                        @Override
+                        public void keyReleased(final KeyEvent e) {
                             valueChanged();
                         }
                     });
@@ -346,7 +353,8 @@ public class TemplateFieldEditor extends FieldEditor {
                         // Ensure that the value is checked on focus loss in case we
                         // missed a keyRelease or user hasn't released key.
                         // See https://bugs.eclipse.org/bugs/show_bug.cgi?id=214716
-                        public void focusLost(FocusEvent e) {
+                        @Override
+                        public void focusLost(final FocusEvent e) {
                             valueChanged();
                         }
                     });
@@ -354,16 +362,19 @@ public class TemplateFieldEditor extends FieldEditor {
                     break;
                 case VALIDATE_ON_FOCUS_LOST:
                     textField.addKeyListener(new KeyAdapter() {
-                        public void keyPressed(KeyEvent e) {
+                        @Override
+                        public void keyPressed(final KeyEvent e) {
                             clearErrorMessage();
                         }
                     });
                     textField.addFocusListener(new FocusAdapter() {
-                        public void focusGained(FocusEvent e) {
+                        @Override
+                        public void focusGained(final FocusEvent e) {
                             refreshValidState();
                         }
 
-                        public void focusLost(FocusEvent e) {
+                        @Override
+                        public void focusLost(final FocusEvent e) {
                             valueChanged();
                             clearErrorMessage();
                         }
@@ -373,7 +384,8 @@ public class TemplateFieldEditor extends FieldEditor {
                     Assert.isTrue(false, "Unknown validate strategy");//$NON-NLS-1$
             }
             textField.addDisposeListener(new DisposeListener() {
-                public void widgetDisposed(DisposeEvent event) {
+                @Override
+                public void widgetDisposed(final DisposeEvent event) {
                     textField = null;
                 }
             });
@@ -400,6 +412,7 @@ public class TemplateFieldEditor extends FieldEditor {
     /* (non-Javadoc)
      * Method declared on FieldEditor.
      */
+    @Override
     public boolean isValid() {
         return isValid;
     }
@@ -407,6 +420,7 @@ public class TemplateFieldEditor extends FieldEditor {
     /* (non-Javadoc)
      * Method declared on FieldEditor.
      */
+    @Override
     protected void refreshValidState() {
         isValid = checkState();
     }
@@ -417,7 +431,7 @@ public class TemplateFieldEditor extends FieldEditor {
      * @param b <code>true</code> if the empty string is allowed,
      * and <code>false</code> if it is considered invalid
      */
-    public void setEmptyStringAllowed(boolean b) {
+    public void setEmptyStringAllowed(final boolean b) {
         emptyStringAllowed = b;
     }
 
@@ -427,13 +441,14 @@ public class TemplateFieldEditor extends FieldEditor {
      *
      * @param message the error message
      */
-    public void setErrorMessage(String message) {
+    public void setErrorMessage(final String message) {
         errorMessage = message;
     }
 
     /* (non-Javadoc)
      * Method declared on FieldEditor.
      */
+    @Override
     public void setFocus() {
         if (textField != null) {
             textField.setFocus();
@@ -463,9 +478,9 @@ public class TemplateFieldEditor extends FieldEditor {
      *
      * @param limit the limit on the number of character in the text
      * input field, or <code>UNLIMITED</code> for no limit
-     * 
+     *
      */
-    public void setTextLimit(int limit) {
+    public void setTextLimit(final int limit) {
         textLimit = limit;
         if (textField != null) {
             textField.setTextLimit(limit);
@@ -485,7 +500,7 @@ public class TemplateFieldEditor extends FieldEditor {
      * on the fly checking (the default), or <code>VALIDATE_ON_FOCUS_LOST</code> to
      * perform validation only after the text has been typed in
      */
-    public void setValidateStrategy(int value) {
+    public void setValidateStrategy(final int value) {
         Assert.isTrue(value == VALIDATE_ON_FOCUS_LOST
             || value == VALIDATE_ON_KEY_STROKE);
         validateStrategy = value;
@@ -509,14 +524,14 @@ public class TemplateFieldEditor extends FieldEditor {
      */
     protected void valueChanged() {
         setPresentsDefaultValue(false);
-        boolean oldState = isValid;
+        final boolean oldState = isValid;
         refreshValidState();
 
         if (isValid != oldState) {
             fireStateChanged(IS_VALID, oldState, isValid);
         }
 
-        String newValue = textField.getText();
+        final String newValue = textField.getText();
         if (!newValue.equals(oldValue)) {
             fireValueChanged(VALUE, oldValue, newValue);
             oldValue = newValue;
@@ -526,7 +541,8 @@ public class TemplateFieldEditor extends FieldEditor {
     /*
      * @see FieldEditor.setEnabled(boolean,Composite).
      */
-    public void setEnabled(boolean enabled, Composite parent) {
+    @Override
+    public void setEnabled(final boolean enabled, final Composite parent) {
         super.setEnabled(enabled, parent);
         getTextControl(parent).setEnabled(enabled);
     }

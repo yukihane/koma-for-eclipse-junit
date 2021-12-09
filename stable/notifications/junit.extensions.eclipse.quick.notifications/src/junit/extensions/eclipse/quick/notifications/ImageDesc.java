@@ -12,7 +12,7 @@ public enum ImageDesc {
 
     private String imageFilePath;
 
-    ImageDesc(String imageFilePath) {
+    ImageDesc(final String imageFilePath) {
         this.imageFilePath = imageFilePath;
     }
 

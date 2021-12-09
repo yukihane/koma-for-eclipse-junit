@@ -1,7 +1,6 @@
 package junit.extensions.eclipse.quick.mock.internal;
 
 import java.util.ArrayList;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -22,7 +21,7 @@ public class MockitoClasspathFixProcessor extends ClasspathFixProcessor {
 
     @Override
     public ClasspathFixProposal[] getFixImportProposals(final IJavaProject project,
-        String missingType) throws CoreException {
+        final String missingType) throws CoreException {
         if (missingType == null)
             return null;
         if (missingType.startsWith("org.mockito")) { //$NON-NLS-1$
@@ -35,14 +34,14 @@ public class MockitoClasspathFixProcessor extends ClasspathFixProcessor {
                         monitor = new NullProgressMonitor();
                     }
                     monitor.beginTask(Messages.MockitoClasspathFixProcessor_beginAddMockitoLibraryTask, 1);
-                    IClasspathEntry entry = new MockitoEntry().getContainer();
-                    IClasspathEntry[] oldEntries = project.getRawClasspath();
-                    ArrayList<IClasspathEntry> newEntries = new ArrayList<IClasspathEntry>(oldEntries.length + 1);
+                    final IClasspathEntry entry = new MockitoEntry().getContainer();
+                    final IClasspathEntry[] oldEntries = project.getRawClasspath();
+                    final ArrayList<IClasspathEntry> newEntries = new ArrayList<>(oldEntries.length + 1);
                     boolean added = false;
                     for (int i = 0; i < oldEntries.length; i++) {
                         IClasspathEntry curr = oldEntries[i];
                         if (curr.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
-                            IPath path = curr.getPath();
+                            final IPath path = curr.getPath();
                             if (path.equals(entry.getPath())) {
                                 return new NullChange(); // already on build path
                             } else if (path.matchingFirstSegments(entry.getPath()) > 0) {
@@ -62,9 +61,10 @@ public class MockitoClasspathFixProcessor extends ClasspathFixProcessor {
                         newEntries.add(entry);
                     }
 
-                    final IClasspathEntry[] newCPEntries = (IClasspathEntry[]) newEntries
+                    final IClasspathEntry[] newCPEntries = newEntries
                         .toArray(new IClasspathEntry[newEntries.size()]);
-                    Change newClasspathChange = newClasspathChange(project, newCPEntries, project.getOutputLocation());
+                    final Change newClasspathChange = newClasspathChange(project, newCPEntries,
+                        project.getOutputLocation());
                     if (newClasspathChange != null) {
                         return newClasspathChange;
                     }

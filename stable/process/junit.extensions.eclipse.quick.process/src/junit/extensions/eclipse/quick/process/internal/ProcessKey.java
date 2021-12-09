@@ -7,7 +7,7 @@ public enum ProcessKey {
     private String key;
     private String description;
 
-    ProcessKey(String key, String description) {
+    ProcessKey(final String key, final String description) {
         this.key = key;
         this.description = description;
     }

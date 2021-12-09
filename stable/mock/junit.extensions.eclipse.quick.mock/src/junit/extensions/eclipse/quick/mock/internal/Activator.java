@@ -11,11 +11,13 @@ public class Activator extends AbstractUIPlugin {
         plugin = this;
     }
 
-    public void start(BundleContext context) throws Exception {
+    @Override
+    public void start(final BundleContext context) throws Exception {
         super.start(context);
     }
 
-    public void stop(BundleContext context) throws Exception {
+    @Override
+    public void stop(final BundleContext context) throws Exception {
         super.stop(context);
         plugin = null;
     }

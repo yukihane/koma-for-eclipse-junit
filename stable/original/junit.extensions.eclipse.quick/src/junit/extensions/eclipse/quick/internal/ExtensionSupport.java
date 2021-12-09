@@ -1,7 +1,6 @@
 package junit.extensions.eclipse.quick.internal;
 
 import junit.extensions.eclipse.quick.internal.launch.QuickJUnitLaunchShortcut;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -52,7 +51,7 @@ public class ExtensionSupport {
         for (int i = 0; i < extensions.length; ++i) {
             if (namespace.equals(extensions[i].getNamespaceIdentifier())) {
                 final IConfigurationElement[] elements = extensions[i].getConfigurationElements();
-                ILaunchShortcut shortcut = (ILaunchShortcut) elements[0]
+                final ILaunchShortcut shortcut = (ILaunchShortcut) elements[0]
                     .createExecutableExtension("class"); //$NON-NLS-1$
                 if (shortcut != null) {
                     return shortcut;
@@ -63,7 +62,7 @@ public class ExtensionSupport {
     }
 
     private static ILaunchConfigurationWorkingCopy createWorkingCopy(final String namespace) throws CoreException {
-        ILaunchConfigurationWorkingCopy launchConfiguration = DebugPlugin.getDefault().getLaunchManager()
+        final ILaunchConfigurationWorkingCopy launchConfiguration = DebugPlugin.getDefault().getLaunchManager()
             .getLaunchConfigurationType(namespace).newInstance(null, QUICK_JUNIT_DEFAULT);
         if (launchConfiguration == null) {
             throw new RuntimeException("LaunchConfigurationTypes not found. namespace:" + namespace); //$NON-NLS-1$
@@ -71,13 +70,13 @@ public class ExtensionSupport {
         return launchConfiguration;
     }
 
-    private static ILaunchConfiguration getWorkingCopy(String namespace) throws CoreException {
-        ILaunchConfigurationType type = createWorkingCopy(namespace).getType();
-        ILaunchConfiguration[] configurations = DebugPlugin.getDefault().getLaunchManager()
+    private static ILaunchConfiguration getWorkingCopy(final String namespace) throws CoreException {
+        final ILaunchConfigurationType type = createWorkingCopy(namespace).getType();
+        final ILaunchConfiguration[] configurations = DebugPlugin.getDefault().getLaunchManager()
             .getLaunchConfigurations(type);
         ILaunchConfiguration launchConfiguration = null;
         for (int i = 0; i < configurations.length; i++) {
-            ILaunchConfiguration candidate = configurations[i];
+            final ILaunchConfiguration candidate = configurations[i];
             if (candidate.getName().equals(QUICK_JUNIT_DEFAULT)) {
                 launchConfiguration = candidate;
             }
@@ -89,7 +88,7 @@ public class ExtensionSupport {
         final IWorkbench wb = PlatformUI.getWorkbench();
         final IWizardRegistry reg = wb.getNewWizardRegistry();
         final IWizardDescriptor desc = reg.findWizard(id);
-        IWorkbenchWizard wizard = desc.createWizard();
+        final IWorkbenchWizard wizard = desc.createWizard();
         if (wizard != null) {
             return wizard;
         }
