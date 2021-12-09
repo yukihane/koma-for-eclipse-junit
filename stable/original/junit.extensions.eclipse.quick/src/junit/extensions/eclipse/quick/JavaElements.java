@@ -17,7 +17,7 @@ public class JavaElements {
         if (!method.getReturnType().equals("V"))
             return false;
         final int flags = method.getFlags();
-        if (!Flags.isPublic(flags) || Flags.isStatic(flags))
+        if (Flags.isPrivate(flags) || Flags.isStatic(flags))
             return false;
         if (method.getElementName().startsWith("test"))
             return true;
