@@ -1,9 +1,7 @@
 package junit.extensions.eclipse.quick.process.internal;
 
 import java.io.IOException;
-
 import junit.extensions.eclipse.quick.process.internal.preferences.Preference;
-
 import org.eclipse.jdt.junit.ITestRunListener;
 import org.eclipse.jdt.junit.JUnitCore;
 import org.eclipse.jdt.junit.model.ITestElement.Result;
@@ -20,14 +18,14 @@ public class TestListenerForProcess implements ITestRunListener {
     public TestListenerForProcess() {
 
         JUnitCore.addTestRunListener(new org.eclipse.jdt.junit.TestRunListener() {
-            private TemplateParser tmpParser = new TemplateParser();
-            private ProcessParser processParser = new ProcessParser();
+            private final TemplateParser tmpParser = new TemplateParser();
+            private final ProcessParser processParser = new ProcessParser();
 
             @Override
-            public void sessionFinished(ITestRunSession session) {
-                String template = Preference.TEMPLATE.getValue();
+            public void sessionFinished(final ITestRunSession session) {
+                final String template = Preference.TEMPLATE.getValue();
                 tmpParser.setTemplate(template);
-                Result testResult = session.getTestResult(true);
+                final Result testResult = session.getTestResult(true);
                 String summary;
                 if (Result.ERROR.equals(testResult)) {
                     summary = TEST_ERROR;
@@ -36,42 +34,50 @@ public class TestListenerForProcess implements ITestRunListener {
                 } else {
                     summary = TEST_OK;
                 }
-                String detail = tmpParser.parseTemplate(session);
-                String command = Preference.PROCESS.getValue();
-                String[] parsed = processParser.parse(command, summary, detail);
-                ProcessBuilder builder = new ProcessBuilder(parsed);
+                final String detail = tmpParser.parseTemplate(session);
+                final String command = Preference.PROCESS.getValue();
+                final String[] parsed = processParser.parse(command, summary, detail);
+                final ProcessBuilder builder = new ProcessBuilder(parsed);
                 try {
                     builder.start();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                 }
             }
         });
     }
 
-    public void testEnded(String testId, String testName) {
+    @Override
+    public void testEnded(final String testId, final String testName) {
     }
 
-    public void testFailed(int status, String testId, String testName,
-        String trace) {
+    @Override
+    public void testFailed(final int status, final String testId, final String testName,
+        final String trace) {
     }
 
-    public void testReran(String testId, String testClass, String testName,
-        int status, String trace) {
+    @Override
+    public void testReran(final String testId, final String testClass, final String testName,
+        final int status, final String trace) {
     }
 
-    public void testRunEnded(long elapsedTime) {
+    @Override
+    public void testRunEnded(final long elapsedTime) {
     }
 
-    public void testRunStarted(int testCount) {
+    @Override
+    public void testRunStarted(final int testCount) {
     }
 
-    public void testRunStopped(long elapsedTime) {
+    @Override
+    public void testRunStopped(final long elapsedTime) {
     }
 
+    @Override
     public void testRunTerminated() {
     }
 
-    public void testStarted(String testId, String testName) {
+    @Override
+    public void testStarted(final String testId, final String testName) {
     }
 
 }

@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Display;
  * <p>
  * Note: Copied from FormColors of UI Forms.
  * </p>
- * 
+ *
  * @author Benjamin Pasero (initial contribution from RSSOwl, see bug 177974)
  * @author Mik Kersten
  */
@@ -31,12 +31,12 @@ public class JUnitNotificationPopupColors {
 
     private final ResourceManager resourceManager;
 
-    private JUnitNotification notification;
+    private final JUnitNotification notification;
 
     private Color baseColor;
 
-    public JUnitNotificationPopupColors(Display display, ResourceManager resourceManager,
-        JUnitNotification notification) {
+    public JUnitNotificationPopupColors(final Display display, final ResourceManager resourceManager,
+        final JUnitNotification notification) {
         this.display = display;
         this.resourceManager = resourceManager;
         this.notification = notification;
@@ -52,7 +52,7 @@ public class JUnitNotificationPopupColors {
     }
 
     private void computeBaseColor() {
-        Result result = (Result) notification.getAdapter(Result.class);
+        final Result result = (Result) notification.getAdapter(Result.class);
         if (Result.OK.equals(result)) {
             baseColor = display.getSystemColor(SWT.COLOR_GREEN);
         } else {
@@ -78,7 +78,7 @@ public class JUnitNotificationPopupColors {
 
     private void createBorderColor() {
         RGB tbBorder = baseColor.getRGB();
-        RGB bg = getImpliedBackground().getRGB();
+        final RGB bg = getImpliedBackground().getRGB();
 
         // Group 1
         // Rule: If at least 2 of the RGB values are equal to or between 180 and
@@ -97,9 +97,9 @@ public class JUnitNotificationPopupColors {
     }
 
     private void createGradientColors() {
-        RGB titleBg = baseColor.getRGB();
-        Color bgColor = getImpliedBackground();
-        RGB bg = bgColor.getRGB();
+        final RGB titleBg = baseColor.getRGB();
+        final Color bgColor = getImpliedBackground();
+        final RGB bg = bgColor.getRGB();
         RGB bottom, top;
 
         // Group 1
@@ -140,19 +140,19 @@ public class JUnitNotificationPopupColors {
         gradientEnd = getColor(resourceManager, bottom);
     }
 
-    private RGB blend(RGB c1, RGB c2, int ratio) {
-        int r = blend(c1.red, c2.red, ratio);
-        int g = blend(c1.green, c2.green, ratio);
-        int b = blend(c1.blue, c2.blue, ratio);
+    private RGB blend(final RGB c1, final RGB c2, final int ratio) {
+        final int r = blend(c1.red, c2.red, ratio);
+        final int g = blend(c1.green, c2.green, ratio);
+        final int b = blend(c1.blue, c2.blue, ratio);
         return new RGB(r, g, b);
     }
 
-    private int blend(int v1, int v2, int ratio) {
-        int b = (ratio * v1 + (100 - ratio) * v2) / 100;
+    private int blend(final int v1, final int v2, final int ratio) {
+        final int b = (ratio * v1 + (100 - ratio) * v2) / 100;
         return Math.min(255, b);
     }
 
-    private boolean testTwoPrimaryColors(RGB rgb, int from, int to) {
+    private boolean testTwoPrimaryColors(final RGB rgb, final int from, final int to) {
         int total = 0;
         if (testPrimaryColor(rgb.red, from, to)) {
             total++;
@@ -166,11 +166,11 @@ public class JUnitNotificationPopupColors {
         return total >= 2;
     }
 
-    private boolean testPrimaryColor(int value, int from, int to) {
+    private boolean testPrimaryColor(final int value, final int from, final int to) {
         return value > from && value < to;
     }
 
-    private RGB getSystemColor(int code) {
+    private RGB getSystemColor(final int code) {
         return getDisplay().getSystemColor(code).getRGB();
     }
 
@@ -182,10 +182,10 @@ public class JUnitNotificationPopupColors {
         return display;
     }
 
-    private Color getColor(ResourceManager manager, RGB rgb) {
+    private Color getColor(final ResourceManager manager, final RGB rgb) {
         try {
             return manager.createColor(rgb);
-        } catch (DeviceResourceException e) {
+        } catch (final DeviceResourceException e) {
             return manager.getDevice().getSystemColor(SWT.COLOR_BLACK);
         }
     }

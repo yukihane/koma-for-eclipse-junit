@@ -1,7 +1,6 @@
 package junit.extensions.eclipse.quick.notifications.internal;
 
 import junit.extensions.eclipse.quick.notifications.ImageDesc;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.mylyn.commons.ui.CommonUiUtil;
 import org.eclipse.mylyn.commons.ui.compatibility.CommonColors;
@@ -30,10 +29,10 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
 
     private Shell shell;
     private Image lastUsedBgImage;
-    private JUnitNotification notification;
-    private JUnitNotificationPopupColors color;
+    private final JUnitNotification notification;
+    private final JUnitNotificationPopupColors color;
 
-    public JUnitNotificationPopup(Shell parent, JUnitNotification notification) {
+    public JUnitNotificationPopup(final Shell parent, final JUnitNotification notification) {
         super(parent.getDisplay());
         setDelayClose(3 * 1000);
         setFadingEnabled(false);
@@ -42,7 +41,7 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
     }
 
     @Override
-    protected void configureShell(Shell newShell) {
+    protected void configureShell(final Shell newShell) {
         super.configureShell(newShell);
         shell = newShell;
     }
@@ -53,14 +52,14 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
     }
 
     @Override
-    protected Image getPopupShellImage(int maximumHeight) {
+    protected Image getPopupShellImage(final int maximumHeight) {
         return ImageDesc.ICON.getImage();
     }
 
     @Override
-    protected void createContentArea(Composite parent) {
-        Composite notificationComposite = new Composite(parent, SWT.NO_FOCUS);
-        GridLayout gridLayout = new GridLayout(2, false);
+    protected void createContentArea(final Composite parent) {
+        final Composite notificationComposite = new Composite(parent, SWT.NO_FOCUS);
+        final GridLayout gridLayout = new GridLayout(2, false);
         GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(notificationComposite);
         notificationComposite.setLayout(gridLayout);
         notificationComposite.setBackground(parent.getBackground());
@@ -77,11 +76,12 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
         itemLink.setText(CommonUiUtil.toLabel(notification.getLabel()));
         itemLink.setBackground(parent.getBackground());
         itemLink.addHyperlinkListener(new HyperlinkAdapter() {
-            public void linkActivated(HyperlinkEvent e) {
+            @Override
+            public void linkActivated(final HyperlinkEvent e) {
                 notification.open();
-                IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+                final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
                 if (window != null) {
-                    Shell windowShell = window.getShell();
+                    final Shell windowShell = window.getShell();
                     if (windowShell != null) {
                         if (windowShell.getMinimized()) {
                             windowShell.setMinimized(false);
@@ -99,7 +99,7 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
             descriptionText = notification.getDescription();
         }
         if (descriptionText != null && !descriptionText.trim().equals("")) { //$NON-NLS-1$
-            Label descriptionLabel = new Label(notificationComposite, SWT.NO_FOCUS | SWT.WRAP);
+            final Label descriptionLabel = new Label(notificationComposite, SWT.NO_FOCUS | SWT.WRAP);
             descriptionLabel.setText(CommonUiUtil.toLabel(descriptionText));
             descriptionLabel.setBackground(parent.getBackground());
             GridDataFactory.fillDefaults()
@@ -112,8 +112,8 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
 
     @Override
     public int open() {
-        int open = super.open();
-        Point location = shell.getLocation();
+        final int open = super.open();
+        final Point location = shell.getLocation();
         shell.setLocation(location.x, 32);
         return open;
     }
@@ -123,7 +123,7 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
     }
 
     @Override
-    protected Control createContents(Composite parent) {
+    protected Control createContents(final Composite parent) {
         ((GridLayout) parent.getLayout()).marginWidth = 1;
         ((GridLayout) parent.getLayout()).marginHeight = 1;
 
@@ -135,10 +135,10 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
         outerCircle.addControlListener(new ControlAdapter() {
 
             @Override
-            public void controlResized(ControlEvent e) {
-                Rectangle clArea = outerCircle.getClientArea();
+            public void controlResized(final ControlEvent e) {
+                final Rectangle clArea = outerCircle.getClientArea();
                 lastUsedBgImage = new Image(outerCircle.getDisplay(), clArea.width, clArea.height);
-                GC gc = new GC(lastUsedBgImage);
+                final GC gc = new GC(lastUsedBgImage);
 
                 /* Gradient */
                 drawGradient(gc, clArea);
@@ -148,7 +148,7 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
 
                 gc.dispose();
 
-                Image oldBGImage = outerCircle.getBackgroundImage();
+                final Image oldBGImage = outerCircle.getBackgroundImage();
                 outerCircle.setBackgroundImage(lastUsedBgImage);
 
                 if (oldBGImage != null) {
@@ -156,13 +156,13 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
                 }
             }
 
-            private void drawGradient(GC gc, Rectangle clArea) {
+            private void drawGradient(final GC gc, final Rectangle clArea) {
                 gc.setForeground(color.getGradientBegin());
                 gc.setBackground(color.getGradientEnd());
                 gc.fillGradientRectangle(clArea.x, clArea.y, clArea.width, clArea.height, true);
             }
 
-            private void fixRegion(GC gc, Rectangle clArea) {
+            private void fixRegion(final GC gc, final Rectangle clArea) {
                 gc.setForeground(color.getBorder());
 
                 /* Fill Top Left */
@@ -219,7 +219,7 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
         createTitleArea(titleCircle);
 
         /* Outer composite to hold content controlls */
-        Composite outerContentCircle = new Composite(outerCircle, SWT.NONE);
+        final Composite outerContentCircle = new Composite(outerCircle, SWT.NONE);
         outerContentCircle.setBackgroundMode(SWT.INHERIT_FORCE);
 
         layout = new GridLayout(1, false);
@@ -231,7 +231,7 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
         outerContentCircle.setBackground(outerCircle.getBackground());
 
         /* Middle composite to show a 1px black line around the content controls */
-        Composite middleContentCircle = new Composite(outerContentCircle, SWT.NO_FOCUS);
+        final Composite middleContentCircle = new Composite(outerContentCircle, SWT.NO_FOCUS);
         middleContentCircle.setBackgroundMode(SWT.INHERIT_FORCE);
 
         layout = new GridLayout(1, false);
@@ -244,7 +244,7 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
         middleContentCircle.setBackground(color.getBorder());
 
         /* Inner composite containing the content controls */
-        Composite innerContent = new Composite(middleContentCircle, SWT.NO_FOCUS);
+        final Composite innerContent = new Composite(middleContentCircle, SWT.NO_FOCUS);
         innerContent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         innerContent.setBackgroundMode(SWT.INHERIT_FORCE);
 
@@ -266,7 +266,7 @@ public class JUnitNotificationPopup extends AbstractNotificationPopup {
     }
 
     private void setNullBackground(final Composite outerCircle) {
-        for (Control c : outerCircle.getChildren()) {
+        for (final Control c : outerCircle.getChildren()) {
             c.setBackground(null);
             if (c instanceof Composite) {
                 setNullBackground((Composite) c);

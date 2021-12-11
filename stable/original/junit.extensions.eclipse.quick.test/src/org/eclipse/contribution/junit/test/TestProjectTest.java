@@ -42,20 +42,20 @@ public class TestProjectTest {
         assertTrue(workspace.getRoot().exists(new Path("TestProject")));
         assertTrue(workspace.getRoot().exists(new Path("TestProject/src/test")));
         assertTrue(workspace.getRoot().exists(new Path("TestProject/src/test/TestClass.java")));
-        IType testClass = project.getJavaProject().findType("test.TestClass");
+        final IType testClass = project.getJavaProject().findType("test.TestClass");
         assertTrue(testClass.exists());
-        IMethod method = testClass.getMethod("test_test", null);
+        final IMethod method = testClass.getMethod("test_test", null);
         assertFalse(method.exists());
-        IMethod doMethod = testClass.getMethod("do_test", null);
-        IAnnotation annotation = doMethod.getAnnotation("org.junit.Test");
+        final IMethod doMethod = testClass.getMethod("do_test", null);
+        final IAnnotation annotation = doMethod.getAnnotation("org.junit.Test");
         assertTrue(annotation.exists());
-        int length = doMethod.getJavadocRange().getLength();
+        final int length = doMethod.getJavadocRange().getLength();
         System.out.println(doMethod.getSource().substring(0, length));
         createAST(testClass);
     }
 
-    private void createAST(IType testClass) throws Exception {
-        ASTParser parser = ASTParser.newParser(AST.JLS3);
+    private void createAST(final IType testClass) throws Exception {
+        final ASTParser parser = ASTParser.newParser(AST.JLS3);
 
         parser.setSource(testClass.getCompilationUnit());
         parser.createAST(new NullProgressMonitor());
@@ -65,10 +65,11 @@ public class TestProjectTest {
     public void before() throws Exception {
         project = new TestProject();
         project.addJar("org.junit", "junit.jar");
-        IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
-            public void run(IProgressMonitor monitor) throws CoreException {
+        final IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
+            @Override
+            public void run(final IProgressMonitor monitor) throws CoreException {
                 monitor.beginTask("create test project", 10);
-                IPackageFragment pack = project.createPackage("test");
+                final IPackageFragment pack = project.createPackage("test");
                 monitor.setTaskName("create TestClass");
                 project.createType(pack, "TestClass.java",
                     "public class TestClass{\n" +
@@ -102,11 +103,11 @@ public class TestProjectTest {
         IWorkbench workbench;
         try {
             workbench = PlatformUI.getWorkbench();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             return;
         }
-        IIntroManager introManager = workbench.getIntroManager();
-        IIntroPart intro = introManager.getIntro();
+        final IIntroManager introManager = workbench.getIntroManager();
+        final IIntroPart intro = introManager.getIntro();
         if (intro != null && introManager.isIntroStandby(intro)) {
             introManager.closeIntro(intro);
         }
@@ -114,16 +115,16 @@ public class TestProjectTest {
 
     @Test
     public void learning_SearchEngine() throws Exception {
-        SearchEngine engine = new SearchEngine();
-        IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
-        SearchPattern pattern = SearchPattern.createPattern("TestClass2", IJavaSearchConstants.CLASS,
+        final SearchEngine engine = new SearchEngine();
+        final IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
+        final SearchPattern pattern = SearchPattern.createPattern("TestClass2", IJavaSearchConstants.CLASS,
             IJavaSearchConstants.DECLARATIONS, SearchPattern.R_FULL_MATCH);
-        SearchParticipant[] participants = new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() };
-        SearchRequestor requestor = new SearchRequestor() {
+        final SearchParticipant[] participants = new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() };
+        final SearchRequestor requestor = new SearchRequestor() {
 
             @Override
-            public void acceptSearchMatch(SearchMatch match) throws CoreException {
-                Object element = match.getElement();
+            public void acceptSearchMatch(final SearchMatch match) throws CoreException {
+                final Object element = match.getElement();
                 System.out.println(element.getClass().getName());
                 System.out.println(element);
             }

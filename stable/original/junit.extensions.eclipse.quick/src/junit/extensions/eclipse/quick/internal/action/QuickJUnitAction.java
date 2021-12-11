@@ -22,7 +22,8 @@ public abstract class QuickJUnitAction implements IEditorActionDelegate, IObject
     protected IJavaElement javaElement;
     protected ITextEditor javaEditor;
 
-    public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+    @Override
+    public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
         if (!(targetEditor instanceof ITextEditor)) {
             javaEditor = null;
             return;
@@ -31,23 +32,25 @@ public abstract class QuickJUnitAction implements IEditorActionDelegate, IObject
         shell = javaEditor.getSite().getShell();
     }
 
-    public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+    @Override
+    public void setActivePart(final IAction action, final IWorkbenchPart targetPart) {
         shell = targetPart.getSite().getShell();
     }
 
-    public void selectionChanged(IAction action, ISelection selection) {
+    @Override
+    public void selectionChanged(final IAction action, final ISelection selection) {
         if (!(selection instanceof IStructuredSelection)) {
             javaElement = null;
             return;
         }
-        Object element = ((IStructuredSelection) selection).getFirstElement();
+        final Object element = ((IStructuredSelection) selection).getFirstElement();
         if (element instanceof IJavaElement)
             javaElement = (IJavaElement) element;
         else
             javaElement = null;
     }
 
-    protected void openInformation(IAction action, String message) {
+    protected void openInformation(final IAction action, final String message) {
         MessageDialog.openInformation(shell, action.getText(), message);
     }
 
@@ -56,23 +59,23 @@ public abstract class QuickJUnitAction implements IEditorActionDelegate, IObject
     }
 
     protected IJavaElement getElementOfJavaEditor() throws JavaModelException {
-        ICompilationUnit unit = getCompilationUnitOfJavaEditor();
+        final ICompilationUnit unit = getCompilationUnitOfJavaEditor();
         if (unit == null)
             return null;
-        ISelectionProvider provider = javaEditor.getSelectionProvider();
-        ISelection selection = provider.getSelection();
+        final ISelectionProvider provider = javaEditor.getSelectionProvider();
+        final ISelection selection = provider.getSelection();
         if (!(selection instanceof ITextSelection))
             return null;
-        int offset = ((ITextSelection) selection).getOffset();
-        IJavaElement element = unit.getElementAt(offset);
+        final int offset = ((ITextSelection) selection).getOffset();
+        final IJavaElement element = unit.getElementAt(offset);
         return element;
     }
 
     protected ICompilationUnit getCompilationUnitOfJavaEditor() throws JavaModelException {
         if (javaEditor == null)
             return null;
-        IEditorInput input = javaEditor.getEditorInput();
-        IJavaElement element = (IJavaElement) input.getAdapter(IJavaElement.class);
+        final IEditorInput input = javaEditor.getEditorInput();
+        final IJavaElement element = input.getAdapter(IJavaElement.class);
         if (element instanceof ICompilationUnit)
             return (ICompilationUnit) element;
         return null;

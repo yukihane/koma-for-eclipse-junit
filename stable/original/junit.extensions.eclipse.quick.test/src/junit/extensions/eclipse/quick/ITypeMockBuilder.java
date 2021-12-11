@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -19,24 +18,24 @@ import org.eclipse.jdt.core.JavaModelException;
 
 public class ITypeMockBuilder {
 
-    private IType result = mock(IType.class);
+    private final IType result = mock(IType.class);
     private int flags;
-    private List<IMethod> methods = new ArrayList<IMethod>();
-    private StringBuilder source = new StringBuilder();
+    private final List<IMethod> methods = new ArrayList<>();
+    private final StringBuilder source = new StringBuilder();
     private IImportDeclaration importDeclaration;
 
     {
-        ITypeHierarchy typeHierarchy = mock(ITypeHierarchy.class);
+        final ITypeHierarchy typeHierarchy = mock(ITypeHierarchy.class);
         when(typeHierarchy.getAllInterfaces()).thenReturn(new IType[] {});
         try {
             when(result.newSupertypeHierarchy((IProgressMonitor) any())).thenReturn(typeHierarchy);
             when(result.isClass()).thenReturn(true);
             when(result.getMethods()).thenReturn(new IMethod[] {});
-            ICompilationUnit compilationUnit = mock(ICompilationUnit.class);
+            final ICompilationUnit compilationUnit = mock(ICompilationUnit.class);
             when(result.getCompilationUnit()).thenReturn(compilationUnit);
             importDeclaration = mock(IImportDeclaration.class);
             when(compilationUnit.getImport(JavaTypes.TEST_ANNOTATION_FULL_NAME)).thenReturn(importDeclaration);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
         }
 
     }
@@ -49,7 +48,7 @@ public class ITypeMockBuilder {
         flags |= Flags.AccPublic;
         try {
             when(result.getFlags()).thenReturn(flags);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
         }
         return this;
     }
@@ -59,13 +58,13 @@ public class ITypeMockBuilder {
         return this;
     }
 
-    public ITypeMockBuilder addMethod(IMethod method) {
+    public ITypeMockBuilder addMethod(final IMethod method) {
         try {
             methods.add(method);
-            IMethod[] methodsArray = (IMethod[]) methods.toArray(new IMethod[] {});
+            final IMethod[] methodsArray = methods.toArray(new IMethod[] {});
             when(result.getMethods()).thenReturn(methodsArray);
             when(method.getDeclaringType()).thenReturn(result);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             e.printStackTrace();
         }
         return this;
@@ -73,25 +72,25 @@ public class ITypeMockBuilder {
 
     public ITypeMockBuilder junit3_class() {
         setPublic();
-        ITypeHierarchy typeHierarchy = mock(ITypeHierarchy.class);
-        IType test = mock(IType.class);
+        final ITypeHierarchy typeHierarchy = mock(ITypeHierarchy.class);
+        final IType test = mock(IType.class);
         when(test.getFullyQualifiedName()).thenReturn(JavaTypes.TEST_INTERFACE_NAME);
         when(test.getFullyQualifiedName(anyChar())).thenReturn(JavaTypes.TEST_INTERFACE_NAME);
         when(typeHierarchy.getAllInterfaces()).thenReturn(new IType[] { test });
         try {
             when(result.newSupertypeHierarchy((IProgressMonitor) any())).thenReturn(typeHierarchy);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             e.printStackTrace();
         }
 
         return this;
     }
 
-    public ITypeMockBuilder setRunWith(String clazz) {
+    public ITypeMockBuilder setRunWith(final String clazz) {
         try {
             source.append("@RunWith(" + clazz + ")");
             when(result.getSource()).thenReturn(source.toString());
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             e.printStackTrace();
         }
         return this;
@@ -101,7 +100,7 @@ public class ITypeMockBuilder {
         try {
             source.append("@SuiteClasses");
             when(result.getSource()).thenReturn(source.toString());
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             e.printStackTrace();
         }
         return this;

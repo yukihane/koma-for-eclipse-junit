@@ -1,8 +1,8 @@
 package junit.extensions.eclipse.quick.notifications.internal.preference;
 
 import static junit.extensions.eclipse.quick.notifications.internal.preference.Preference.TEMPLATE;
-import junit.extensions.eclipse.quick.notifications.Activator;
 
+import junit.extensions.eclipse.quick.notifications.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -11,8 +11,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
  */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
+    @Override
     public void initializeDefaultPreferences() {
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+        final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
         store.setDefault(TEMPLATE.name(), "passed:${ok_counts} failure:${fail_counts} Total:${total_counts}"); //$NON-NLS-1$
     }
 

@@ -4,7 +4,7 @@ public class NamingRule {
     private String value;
     private boolean enabled;
 
-    public NamingRule(String value, boolean enabled) {
+    public NamingRule(final String value, final boolean enabled) {
         this.value = value;
         this.enabled = enabled;
     }
@@ -17,11 +17,11 @@ public class NamingRule {
         return value;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 }

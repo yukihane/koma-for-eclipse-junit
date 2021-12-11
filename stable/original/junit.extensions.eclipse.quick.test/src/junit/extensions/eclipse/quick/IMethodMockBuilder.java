@@ -1,27 +1,28 @@
 package junit.extensions.eclipse.quick;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 
-import static org.mockito.Mockito.*;
-
 public class IMethodMockBuilder {
 
-    private IMethod element = mock(IMethod.class);
+    private final IMethod element = mock(IMethod.class);
     private int flags;
 
     public IMethodMockBuilder returnVoid() {
         try {
             when(element.getReturnType()).thenReturn("V");
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             e.printStackTrace();
         }
         return this;
     }
 
-    public IMethodMockBuilder setName(String name) {
+    public IMethodMockBuilder setName(final String name) {
         when(element.getElementName()).thenReturn(name);
         return this;
     }
@@ -29,16 +30,16 @@ public class IMethodMockBuilder {
     public IMethodMockBuilder addTestAnnotation() {
         try {
             when(element.getSource()).thenReturn("@Test public void should_normal(){\n\n}");
-            IAnnotation annotation = mock(IAnnotation.class);
+            final IAnnotation annotation = mock(IAnnotation.class);
             when(annotation.getElementName()).thenReturn("org.junit.Test");
-            IAnnotation[] annotations = new IAnnotation[] { annotation };
+            final IAnnotation[] annotations = new IAnnotation[] { annotation };
             when(element.getAnnotations()).thenReturn(annotations);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
         }
         return this;
     }
 
-    public IMethodMockBuilder setNumberOfParameters(int i) {
+    public IMethodMockBuilder setNumberOfParameters(final int i) {
         when(element.getNumberOfParameters()).thenReturn(i);
         return this;
     }
@@ -47,7 +48,7 @@ public class IMethodMockBuilder {
         flags |= Flags.AccPublic;
         try {
             when(element.getFlags()).thenReturn(flags);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             e.printStackTrace();
         }
         return this;
@@ -57,7 +58,7 @@ public class IMethodMockBuilder {
         flags |= Flags.AccPrivate;
         try {
             when(element.getFlags()).thenReturn(Flags.AccPrivate);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             e.printStackTrace();
         }
         return this;
@@ -68,7 +69,7 @@ public class IMethodMockBuilder {
         flags |= Flags.AccProtected;
         try {
             when(element.getFlags()).thenReturn(flags);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             e.printStackTrace();
         }
         return this;
@@ -78,7 +79,7 @@ public class IMethodMockBuilder {
         try {
             flags |= Flags.AccStatic;
             when(element.getFlags()).thenReturn(flags);
-        } catch (JavaModelException e) {
+        } catch (final JavaModelException e) {
             e.printStackTrace();
         }
         return this;
