@@ -1,4 +1,6 @@
-= Forked Version https://github.com/kompiro/quick-junit[Quick JUnit]
+= Koma, for quick JUnit testing on Eclipse
+
+This project is forked one of https://github.com/kompiro/quick-junit[Quick JUnit].
 
 == Target Environments
 
